@@ -8,8 +8,9 @@ OcclusionCullingSettings:
     smallestOccluder: 5
     smallestHole: 0.25
     backfaceThreshold: 100
-  m_SceneGUID: 00000000000000000000000000000000
-  m_OcclusionCullingData: {fileID: 0}
+  m_SceneGUID: 562d854d8339ec6448eac79d35e2fcd6
+  m_OcclusionCullingData: {fileID: 36300000, guid: 0497c76a24a41724eb73d8cdc8069aea,
+    type: 2}
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
@@ -963,11 +964,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RequiresOpaqueTextureOption
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2327316438668475044, guid: 98eb1cae7ba7ec144b6229cb42aed1bc,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4584683441568215134, guid: 98eb1cae7ba7ec144b6229cb42aed1bc,
         type: 3}
@@ -2619,6 +2615,31 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2244666415158325430, guid: 06a272fcb2907054f9894f75e2f5c5a0,
+        type: 3}
+      propertyPath: m_Type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2244666415158325430, guid: 06a272fcb2907054f9894f75e2f5c5a0,
+        type: 3}
+      propertyPath: m_Lightmapping
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7476617912061898224, guid: 06a272fcb2907054f9894f75e2f5c5a0,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7476617912061898224, guid: 06a272fcb2907054f9894f75e2f5c5a0,
+        type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7476617912061898224, guid: 06a272fcb2907054f9894f75e2f5c5a0,
+        type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7714049811899296163, guid: 06a272fcb2907054f9894f75e2f5c5a0,
         type: 3}
       propertyPath: m_Name
@@ -2777,7 +2798,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.3
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
