@@ -913,22 +913,22 @@ PrefabInstance:
     - target: {fileID: 1200369936458757613, guid: 98eb1cae7ba7ec144b6229cb42aed1bc,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.92387956
+      value: 0.7321272
       objectReference: {fileID: 0}
     - target: {fileID: 1200369936458757613, guid: 98eb1cae7ba7ec144b6229cb42aed1bc,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1200369936458757613, guid: 98eb1cae7ba7ec144b6229cb42aed1bc,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.38268343
+      value: 0.6811681
       objectReference: {fileID: 0}
     - target: {fileID: 1200369936458757613, guid: 98eb1cae7ba7ec144b6229cb42aed1bc,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1200369936458757613, guid: 98eb1cae7ba7ec144b6229cb42aed1bc,
         type: 3}
@@ -938,13 +938,19 @@ PrefabInstance:
     - target: {fileID: 1200369936458757613, guid: 98eb1cae7ba7ec144b6229cb42aed1bc,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 45
+      value: 85.87
       objectReference: {fileID: 0}
     - target: {fileID: 1200369936458757613, guid: 98eb1cae7ba7ec144b6229cb42aed1bc,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1376582001464602191, guid: 98eb1cae7ba7ec144b6229cb42aed1bc,
+        type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000,
+        type: 0}
     - target: {fileID: 1924850453780483859, guid: 98eb1cae7ba7ec144b6229cb42aed1bc,
         type: 3}
       propertyPath: m_CameraType
@@ -1109,10 +1115,10 @@ MonoBehaviour:
   _controller: {fileID: 524361552}
   _jumpHeight: 2
   _gravity: 9.81
-  _groundCheck: {fileID: 524361547}
+  _groundCheck: {fileID: 1937045236}
   _groundLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 65
   _groundCheckRadius: 0.2
 --- !u!114 &524361549
 MonoBehaviour:
@@ -1157,7 +1163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _controller: {fileID: 524361552}
-  _speed: 10
+  _speed: 5
 --- !u!143 &524361552
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1195,7 +1201,7 @@ GameObject:
   - component: {fileID: 561361652}
   - component: {fileID: 561361651}
   - component: {fileID: 561361650}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2785,7 +2791,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &1867334911
 Light:
   m_ObjectHideFlags: 0
@@ -2938,6 +2944,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1937045236 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6688480939634676939, guid: 98eb1cae7ba7ec144b6229cb42aed1bc,
+    type: 3}
+  m_PrefabInstance: {fileID: 524361543}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -1162,7 +1162,7 @@ GameObject:
   - component: {fileID: 1016237341}
   - component: {fileID: 1016237340}
   - component: {fileID: 1016237339}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: The central part of the road
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1716,7 +1716,7 @@ GameObject:
   - component: {fileID: 1718993834}
   - component: {fileID: 1718993833}
   - component: {fileID: 1718993832}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Right side of the road
   m_TagString: Untagged
   m_Icon: {fileID: 0}
