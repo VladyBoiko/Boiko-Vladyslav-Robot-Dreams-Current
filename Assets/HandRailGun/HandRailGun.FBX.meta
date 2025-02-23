@@ -1,0 +1,148 @@
+fileFormatVersion: 2
+guid: ee6dfe33129a0db4193f14207d5c8960
+timeCreated: 1459690489
+licenseType: Store
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: HandRailGun
+    100004: HandRailGun_MeshPart0
+    100006: HandRailGun_MeshPart1
+    100008: HandRailGun_screen
+    100010: HandRailGun_button
+    100012: HandRailGun_button1
+    100014: HandRailGun_button2
+    100016: HandRailGun_emitter
+    100018: HandRailGun_handle
+    100020: HandRailGun_pillars
+    100022: HandRailGun_rails
+    100024: HandRailGun_trigger
+    100026: HandRailGun_tube
+    100028: HandRailGun_tube2
+    100030: HandRailGun_tube3
+    400000: //RootNode
+    400002: HandRailGun
+    400004: HandRailGun_MeshPart0
+    400006: HandRailGun_MeshPart1
+    400008: HandRailGun_screen
+    400010: HandRailGun_button
+    400012: HandRailGun_button1
+    400014: HandRailGun_button2
+    400016: HandRailGun_emitter
+    400018: HandRailGun_handle
+    400020: HandRailGun_pillars
+    400022: HandRailGun_rails
+    400024: HandRailGun_trigger
+    400026: HandRailGun_tube
+    400028: HandRailGun_tube2
+    400030: HandRailGun_tube3
+    2300000: HandRailGun_MeshPart0
+    2300002: HandRailGun_MeshPart1
+    2300004: HandRailGun_screen
+    2300006: HandRailGun
+    2300008: HandRailGun_button
+    2300010: HandRailGun_button1
+    2300012: HandRailGun_button2
+    2300014: HandRailGun_emitter
+    2300016: HandRailGun_handle
+    2300018: HandRailGun_pillars
+    2300020: HandRailGun_rails
+    2300022: HandRailGun_trigger
+    2300024: HandRailGun_tube
+    2300026: HandRailGun_tube2
+    2300028: HandRailGun_tube3
+    3300000: HandRailGun_MeshPart0
+    3300002: HandRailGun_MeshPart1
+    3300004: HandRailGun_screen
+    3300006: HandRailGun
+    3300008: HandRailGun_button
+    3300010: HandRailGun_button1
+    3300012: HandRailGun_button2
+    3300014: HandRailGun_emitter
+    3300016: HandRailGun_handle
+    3300018: HandRailGun_pillars
+    3300020: HandRailGun_rails
+    3300022: HandRailGun_trigger
+    3300024: HandRailGun_tube
+    3300026: HandRailGun_tube2
+    3300028: HandRailGun_tube3
+    4300000: HandRailGun_MeshPart0
+    4300002: HandRailGun_MeshPart1
+    4300004: HandRailGun_screen
+    4300006: HandRailGun
+    4300008: HandRailGun_emitter
+    4300010: HandRailGun_button
+    4300012: HandRailGun_button1
+    4300014: HandRailGun_button2
+    4300016: HandRailGun_tube2
+    4300018: HandRailGun_tube
+    4300020: HandRailGun_pillars
+    4300022: HandRailGun_handle
+    4300024: HandRailGun_tube3
+    4300026: HandRailGun_rails
+    4300028: HandRailGun_trigger
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

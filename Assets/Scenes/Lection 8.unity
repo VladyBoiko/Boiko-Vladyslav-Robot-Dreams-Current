@@ -1118,7 +1118,7 @@ MonoBehaviour:
   _groundCheck: {fileID: 1937045236}
   _groundLayer:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 64
   _groundCheckRadius: 0.2
 --- !u!114 &524361549
 MonoBehaviour:
@@ -1133,8 +1133,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cameraController: {fileID: 524361550}
-  _regularYawAnchor: {fileID: 524361545}
-  _lockedYawAnchor: {fileID: 524361547}
+  _regularYawAnchor: {fileID: 524361547}
+  _lockedYawAnchor: {fileID: 524361545}
 --- !u!114 &524361550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1147,9 +1147,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 187f6f2946d58b24dba914f52d3f03c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cameraYawAnchor: {fileID: 524361545}
+  _cameraYawAnchor: {fileID: 524361547}
   _cameraPitchAnchor: {fileID: 524361546}
-  _sensitivity: 0.1
+  _sensitivity: 0.05
 --- !u!114 &524361551
 MonoBehaviour:
   m_ObjectHideFlags: 0
