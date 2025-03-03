@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
 
     private void MoveHandler(Vector2 moveInput)
     {
-        Debug.Log($"Move Input: {moveInput}");
+        // Debug.Log($"Move Input: {moveInput}");
         _moveInput = moveInput.normalized;
     }
 }

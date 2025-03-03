@@ -10,6 +10,7 @@ public class InputController : MonoBehaviour
     public static event Action<Vector2> OnCameraMoveInput;
     public static event Action<bool> OnCameraLock;
     public static event Action<bool> OnCameraChange;
+    public static event Action<bool> OnExplosion;
 
     [SerializeField] private InputActionAsset _inputActionAsset;
     [SerializeField] private string _mapName;
@@ -18,12 +19,14 @@ public class InputController : MonoBehaviour
     [SerializeField] private string _cameraMoveName;
     [SerializeField] private string _cameraLockName;
     [SerializeField] private string _cameraChangeName;
+    [SerializeField] private string _explosionName;
    
     private InputAction _moveAction;
     private InputAction _jumpAction;
     private InputAction _cameraMoveAction;
     private InputAction _cameraLockAction;
     private InputAction _cameraChangeAction;
+    private InputAction _explosionAction;
 
     private bool _inputUpdated;
 
@@ -43,10 +46,15 @@ public class InputController : MonoBehaviour
                             ?? actionMap?.FindAction("CameraLock");
         _cameraChangeAction = actionMap?.FindAction(_cameraChangeName)
                             ?? actionMap?.FindAction("CameraChange");
+        _explosionAction = actionMap?.FindAction(_explosionName)
+                           ?? actionMap?.FindAction("Explosion");
     }
 
     private void OnEnable()
     {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        
         if (_inputActionAsset)
         {
             _moveAction.performed += MovePerformedHandler;
@@ -62,6 +70,9 @@ public class InputController : MonoBehaviour
 
             _cameraChangeAction.performed += CameraChangePerformedHandler;
             _cameraChangeAction.canceled += CameraChangeCanceledHandler;
+
+            _explosionAction.performed += ExplosionPerformedHandler;
+            _explosionAction.canceled += ExplosionCanceledHandler;
         }
         else
         {
@@ -72,6 +83,9 @@ public class InputController : MonoBehaviour
 
     private void OnDisable()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        
         _inputActionAsset?.Disable();
     }
 
@@ -106,23 +120,33 @@ public class InputController : MonoBehaviour
         OnCameraMoveInput?.Invoke(context.ReadValue<Vector2>());
     }
     
-    private void CameraLockPerformedHandler(InputAction.CallbackContext obj)
+    private void CameraLockPerformedHandler(InputAction.CallbackContext context)
     {
         OnCameraLock?.Invoke(true);
     }
-    private void CameraLockCanceledHandler(InputAction.CallbackContext obj)
+    private void CameraLockCanceledHandler(InputAction.CallbackContext context)
     {
         OnCameraLock?.Invoke(false);
     }
     
-    private void CameraChangePerformedHandler(InputAction.CallbackContext obj)
+    private void CameraChangePerformedHandler(InputAction.CallbackContext context)
     {
         OnCameraChange?.Invoke(true);
     }
     
-    private void CameraChangeCanceledHandler(InputAction.CallbackContext obj)
+    private void CameraChangeCanceledHandler(InputAction.CallbackContext context)
     {
         OnCameraChange?.Invoke(false);
+    }
+
+    private void ExplosionPerformedHandler(InputAction.CallbackContext context)
+    {
+        OnExplosion?.Invoke(true);
+    }
+
+    private void ExplosionCanceledHandler(InputAction.CallbackContext context)
+    {
+        OnExplosion?.Invoke(false);
     }
     
 }
