@@ -12,7 +12,7 @@ public class ExplosionController : MonoBehaviour
     [SerializeField] private float _explosionForce;
     [SerializeField] private float _verticalOffset;
     
-    [SerializeField] private GameObject _explosionVisualiation;
+    [SerializeField] private GameObject _explosionVisualization;
     
     private float _radiusReciprocal;
     
@@ -34,9 +34,9 @@ public class ExplosionController : MonoBehaviour
         {
             _hitPoint = hitInfo.point;
 
-            if (_explosionVisualiation != null)
+            if (_explosionVisualization != null)
             {
-                GameObject explosionEffect = Instantiate(_explosionVisualiation, _hitPoint, Quaternion.identity);
+                GameObject explosionEffect = Instantiate(_explosionVisualization, _hitPoint, Quaternion.identity);
                 explosionEffect.transform.localScale = Vector3.one * _explosionRadius;
                 Destroy(explosionEffect, 1.0f);
             }
