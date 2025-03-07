@@ -18,7 +18,7 @@ public class ExplosionController : MonoBehaviour
     
     private void Start()
     {
-        InputController.OnExplosion += ExplosionHandler;
+        InputController.OnExplosionInput += ExplosionHandler;
     }
 
     private void OnEnable()

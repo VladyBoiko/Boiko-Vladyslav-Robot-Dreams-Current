@@ -1,5 +1,4 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,18 +7,26 @@ public class InputController : MonoBehaviour
     public static event Action<Vector2> OnMoveInput;
     public static event Action<bool> OnJumpInput;
     public static event Action<Vector2> OnCameraMoveInput;
-    public static event Action<bool> OnCameraLock;
-    public static event Action<bool> OnCameraChange;
-    public static event Action<bool> OnExplosion;
+    public static event Action<bool> OnCameraLockInput;
+    public static event Action<bool> OnCameraChangeInput;
+    public static event Action<bool> OnExplosionInput;
+    public static event Action<bool> OnShootInput;
+    public static event Action<bool> OnCameraZoomInput;
+    public static event Action<bool> OnShootingModeChange;
 
     [SerializeField] private InputActionAsset _inputActionAsset;
+    
     [SerializeField] private string _mapName;
+    
     [SerializeField] private string _moveName;
     [SerializeField] private string _jumpName;
     [SerializeField] private string _cameraMoveName;
     [SerializeField] private string _cameraLockName;
     [SerializeField] private string _cameraChangeName;
     [SerializeField] private string _explosionName;
+    [SerializeField] private string _shootName;
+    [SerializeField] private string _zoomName;
+    [SerializeField] private string _shootingModeChangeName;
    
     private InputAction _moveAction;
     private InputAction _jumpAction;
@@ -27,6 +34,9 @@ public class InputController : MonoBehaviour
     private InputAction _cameraLockAction;
     private InputAction _cameraChangeAction;
     private InputAction _explosionAction;
+    private InputAction _shootAction;
+    private InputAction _cameraZoomAction;
+    private InputAction _shootingModeChangeAction;
 
     private bool _inputUpdated;
 
@@ -48,6 +58,12 @@ public class InputController : MonoBehaviour
                             ?? actionMap?.FindAction("CameraChange");
         _explosionAction = actionMap?.FindAction(_explosionName)
                            ?? actionMap?.FindAction("Explosion");
+        _shootAction = actionMap?.FindAction(_shootName)
+                       ?? actionMap?.FindAction("Shoot");
+        _cameraZoomAction = actionMap?.FindAction(_zoomName)
+                        ?? actionMap?.FindAction("CameraZoom");
+        _shootingModeChangeAction = actionMap?.FindAction(_shootingModeChangeName)
+                                    ?? actionMap?.FindAction("ShootingModeChange");
     }
 
     private void OnEnable()
@@ -73,6 +89,16 @@ public class InputController : MonoBehaviour
 
             _explosionAction.performed += ExplosionPerformedHandler;
             _explosionAction.canceled += ExplosionCanceledHandler;
+
+            _shootAction.performed += ShootPerformedHandler;
+            _shootAction.canceled += ShootCanceledHandler;
+
+            _cameraZoomAction.performed += CameraZoomPerformedHandler;
+            _cameraZoomAction.canceled += CameraZoomCanceledHandler;
+
+            _shootingModeChangeAction.performed += ShootingModeChangePerformedHandler;
+            _shootingModeChangeAction.canceled += ShootingModeChangeCanceledHandler;
+            
         }
         else
         {
@@ -122,31 +148,55 @@ public class InputController : MonoBehaviour
     
     private void CameraLockPerformedHandler(InputAction.CallbackContext context)
     {
-        OnCameraLock?.Invoke(true);
+        OnCameraLockInput?.Invoke(true);
     }
     private void CameraLockCanceledHandler(InputAction.CallbackContext context)
     {
-        OnCameraLock?.Invoke(false);
+        OnCameraLockInput?.Invoke(false);
     }
     
     private void CameraChangePerformedHandler(InputAction.CallbackContext context)
     {
-        OnCameraChange?.Invoke(true);
+        OnCameraChangeInput?.Invoke(true);
     }
-    
     private void CameraChangeCanceledHandler(InputAction.CallbackContext context)
     {
-        OnCameraChange?.Invoke(false);
+        OnCameraChangeInput?.Invoke(false);
     }
 
     private void ExplosionPerformedHandler(InputAction.CallbackContext context)
     {
-        OnExplosion?.Invoke(true);
+        OnExplosionInput?.Invoke(true);
     }
-
     private void ExplosionCanceledHandler(InputAction.CallbackContext context)
     {
-        OnExplosion?.Invoke(false);
+        OnExplosionInput?.Invoke(false);
     }
-    
+
+    private void ShootPerformedHandler(InputAction.CallbackContext context)
+    {
+        OnShootInput?.Invoke(true);
+    }
+    private void ShootCanceledHandler(InputAction.CallbackContext context)
+    {
+        OnShootInput?.Invoke(false);
+    }
+
+    private void CameraZoomPerformedHandler(InputAction.CallbackContext context)
+    {
+        OnCameraZoomInput?.Invoke(true);
+    }
+    private void CameraZoomCanceledHandler(InputAction.CallbackContext context)
+    {
+        OnCameraZoomInput?.Invoke(false);
+    }
+
+    private void ShootingModeChangePerformedHandler(InputAction.CallbackContext context)
+    {
+        OnShootingModeChange?.Invoke(true);
+    }
+    private void ShootingModeChangeCanceledHandler(InputAction.CallbackContext context)
+    {
+        OnShootingModeChange?.Invoke(false);
+    }
 }

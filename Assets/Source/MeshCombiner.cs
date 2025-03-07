@@ -6,7 +6,7 @@ using UnityEditor;
 public class MeshCombiner : MonoBehaviour
 {
     [SerializeField] private string _meshName;
-    [SerializeField] private bool _mergeSubMeshes = false;
+    [SerializeField] private bool _mergeSubMeshes;
     
     [SerializeField] private MeshFilter[] _meshFilters;
     

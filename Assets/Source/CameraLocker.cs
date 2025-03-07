@@ -8,7 +8,7 @@ public class CameraLocker : MonoBehaviour
 
     private void Start()
     {
-        InputController.OnCameraLock += CameraLockHandler;
+        InputController.OnCameraLockInput += CameraLockHandler;
     }
 
     private void CameraLockHandler(bool cameraLocked)
