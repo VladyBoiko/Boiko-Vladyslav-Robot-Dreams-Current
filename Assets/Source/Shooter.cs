@@ -30,9 +30,9 @@ public class Shooter : MonoBehaviour
     [SerializeField] private Rigidbody _projectilePrefab;
     [SerializeField] private float _projectileSpeed;
     [SerializeField] private float _projectileLifetime;
-    
-    
-    protected int _tilingId;
+
+
+    private int _tilingId;
     private Vector3 _hitPoint;
     
     protected virtual void Start()
@@ -61,6 +61,7 @@ public class Shooter : MonoBehaviour
             if (_shootingMode == ShootingMode.ObjectSpawn)
             {
                 _shootingMode = ShootingMode.RayCast;
+                return;
             }
             _shootingMode ++;
         }
