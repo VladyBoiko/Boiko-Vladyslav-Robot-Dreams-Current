@@ -12,26 +12,34 @@ public class Shooter : MonoBehaviour
         ObjectSpawn
     }
     
-    public event Action<string, Collider> OnHit;
+    public event Action<string, Vector3, Vector3, Collider> OnHit;
     public event Action OnShot;
     
+    [Header("General Properties")]
     [SerializeField] private ShootingMode _shootingMode;
     [SerializeField] private Transform _gunTransform;
     [SerializeField] private Transform _cameraTransform;
+    [SerializeField] private bool _breakOnSpawn;
+    
+    [Header("Ray Properties")]
     [SerializeField] private float _rayDistance;
     [SerializeField] private LayerMask _rayMask;
+    
+    [Header("Sphere Properties")]
     [SerializeField] protected float _shotRadius;
-    [SerializeField] protected HitscanShotAspect _shotPrefab;
-    [SerializeField] protected float _decaySpeed;
     [SerializeField] protected Vector3 _shotScale;
+    
+    [Header("ShotVisual Properties")]
+    [SerializeField] protected HitscanShotAspect _shotPrefab;
     [SerializeField] protected float _shotVisualDiameter;
     [SerializeField] protected string _tilingName;
-    [SerializeField] private bool _breakOnSpawn;
+    [SerializeField] protected float _decaySpeed;
+    
+    [Header("ObjectSpawnShoot Properties")]
     [SerializeField] private Rigidbody _projectilePrefab;
     [SerializeField] private float _projectileSpeed;
     [SerializeField] private float _projectileLifetime;
-
-
+    
     private int _tilingId;
     private Vector3 _hitPoint;
     
@@ -84,6 +92,8 @@ public class Shooter : MonoBehaviour
                     break;
             }
             
+            OnShot?.Invoke();
+            
             if (_breakOnSpawn)
                 Debug.Break();
         }
@@ -96,7 +106,7 @@ public class Shooter : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hitInfo, _rayDistance, _rayMask))
         {
             _hitPoint = hitInfo.point;
-            OnHit?.Invoke("Raycast", hitInfo.collider);
+            OnHit?.Invoke("Raycast", hitInfo.point, hitInfo.normal, hitInfo.collider);
         }
         DrawShot(_hitPoint);
     }
@@ -113,7 +123,7 @@ public class Shooter : MonoBehaviour
             Vector3 rayVector = Vector3.Project(directVector, ray.direction);
             _hitPoint = gunTransformPosition + rayVector;
             
-            OnHit?.Invoke("SphereCast", hitInfo.collider);
+            OnHit?.Invoke("SphereCast", hitInfo.point, hitInfo.normal, hitInfo.collider);
         }
         DrawShot(_hitPoint);
     }
@@ -124,9 +134,9 @@ public class Shooter : MonoBehaviour
         Bullet bullet = new Bullet(_projectilePrefab, _gunTransform, _projectileSpeed, _projectileLifetime);
     }
 
-    private void HandleBulletHit(string shootingModeName, Collider hitCollider)
+    private void HandleBulletHit(string shootingModeName, Collision collision)
     {
-        OnHit?.Invoke(shootingModeName, hitCollider);
+        OnHit?.Invoke(shootingModeName, collision.contacts[0].point, collision.contacts[0].normal, collision.collider);
     }
     
     private IEnumerator ShotRoutine(HitscanShotAspect shot)

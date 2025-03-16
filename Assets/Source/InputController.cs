@@ -13,6 +13,7 @@ public class InputController : MonoBehaviour
     public static event Action<bool> OnShootInput;
     public static event Action<bool> OnCameraZoomInput;
     public static event Action<bool> OnShootingModeChange;
+    public static event Action<bool> OnScoreInput;
 
     [SerializeField] private InputActionAsset _inputActionAsset;
     
@@ -27,6 +28,7 @@ public class InputController : MonoBehaviour
     [SerializeField] private string _shootName;
     [SerializeField] private string _zoomName;
     [SerializeField] private string _shootingModeChangeName;
+    [SerializeField] private string _scoreName;
    
     private InputAction _moveAction;
     private InputAction _jumpAction;
@@ -37,6 +39,7 @@ public class InputController : MonoBehaviour
     private InputAction _shootAction;
     private InputAction _cameraZoomAction;
     private InputAction _shootingModeChangeAction;
+    private InputAction _scoreAction;
 
     private bool _inputUpdated;
 
@@ -64,6 +67,8 @@ public class InputController : MonoBehaviour
                         ?? actionMap?.FindAction("CameraZoom");
         _shootingModeChangeAction = actionMap?.FindAction(_shootingModeChangeName)
                                     ?? actionMap?.FindAction("ShootingModeChange");
+        _scoreAction = actionMap?.FindAction(_scoreName)
+                                    ?? actionMap?.FindAction("ScoreInput");
     }
 
     private void OnEnable()
@@ -98,7 +103,10 @@ public class InputController : MonoBehaviour
 
             _shootingModeChangeAction.performed += ShootingModeChangePerformedHandler;
             _shootingModeChangeAction.canceled += ShootingModeChangeCanceledHandler;
-            
+
+            _scoreAction.performed += ScorePerformedHandler;
+            _scoreAction.canceled += ScoreCanceledHandler;
+
         }
         else
         {
@@ -198,5 +206,15 @@ public class InputController : MonoBehaviour
     private void ShootingModeChangeCanceledHandler(InputAction.CallbackContext context)
     {
         OnShootingModeChange?.Invoke(false);
+    }
+
+    private void ScorePerformedHandler(InputAction.CallbackContext context)
+    {
+        OnScoreInput?.Invoke(true);
+    }
+
+    private void ScoreCanceledHandler(InputAction.CallbackContext context)
+    {
+        OnScoreInput?.Invoke(false);
     }
 }

@@ -1,0 +1,75 @@
+using System;
+using UnityEngine;
+
+public class Health : MonoBehaviour
+{
+    public event Action<int> OnHealthChanged;
+    public event Action<float> OnHealthChanged01;
+    public event Action OnDeath;
+    public event Action<float> OnTakeDamage;
+    
+    [SerializeField] protected int _maxHealth;
+
+    private int _health;
+    private bool _isAlive;
+
+    public int HealthValue
+    {
+        get => _health;
+        set
+        {
+            if (_health == value)
+                return;
+            _health = value;
+            OnHealthChanged?.Invoke(_health);
+            OnHealthChanged01?.Invoke(_health / (float)_maxHealth);
+        }
+    }
+
+    public bool IsAlive
+    {
+        get => _isAlive;
+        set
+        {
+            if (_isAlive == value)
+                return;
+            _isAlive = value;
+            if (!_isAlive)
+            {
+                OnDeath?.Invoke();
+            }
+        }
+    }
+    
+    public float HealthValue01 => _maxHealth > 0 ? (HealthValue / (float)_maxHealth) : 0f;
+    public int MaxHealthValue => _maxHealth;
+
+    protected virtual void Awake()
+    {
+        SetHealth(MaxHealthValue);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (!IsAlive || damage <= 0) return;
+
+        HealthValue = Mathf.Clamp(HealthValue - damage, 0, _maxHealth);
+        if (HealthValue <= 0)
+            IsAlive = false;
+        
+        OnTakeDamage?.Invoke(HealthValue);
+    }
+
+    public void Heal(int heal)
+    {
+        if (!IsAlive || heal <= 0) return;
+        
+        HealthValue = Mathf.Clamp(HealthValue + heal, 0, _maxHealth);
+    }
+
+    public void SetHealth(int health)
+    {
+        HealthValue = Mathf.Clamp(health, 0, _maxHealth);
+        IsAlive = HealthValue > 0;
+    }
+}

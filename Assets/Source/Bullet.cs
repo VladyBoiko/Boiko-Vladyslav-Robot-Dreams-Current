@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public static event Action<string, Collider> OnStaticHit;
+    public static event Action<string, Collision> OnStaticHit;
     
     private Rigidbody _rigidbody;
     
@@ -24,7 +24,7 @@ public class Bullet : MonoBehaviour
     
     private void OnCollisionEnter(Collision collision)
     {
-        OnStaticHit?.Invoke("ObjectSpawn", collision.collider);
+        OnStaticHit?.Invoke("ObjectSpawn", collision);
         Destroy(_rigidbody.gameObject);
     }
 }
