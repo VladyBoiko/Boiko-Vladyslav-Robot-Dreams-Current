@@ -20,6 +20,8 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
+        _sensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 1f);
+        
         InputController.OnCameraMoveInput += CameraMoveHandler;
         InputController.OnCameraChangeInput += CameraChangeHandler;
         InputController.OnCameraZoomInput += CameraZoomInputHandler;

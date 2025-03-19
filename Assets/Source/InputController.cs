@@ -14,6 +14,7 @@ public class InputController : MonoBehaviour
     public static event Action<bool> OnCameraZoomInput;
     public static event Action<bool> OnShootingModeChange;
     public static event Action<bool> OnScoreInput;
+    public static event Action<bool> OnEscapeInput;
 
     [SerializeField] private InputActionAsset _inputActionAsset;
     
@@ -29,6 +30,7 @@ public class InputController : MonoBehaviour
     [SerializeField] private string _zoomName;
     [SerializeField] private string _shootingModeChangeName;
     [SerializeField] private string _scoreName;
+    [SerializeField] private string _escapeName;
    
     private InputAction _moveAction;
     private InputAction _jumpAction;
@@ -40,41 +42,44 @@ public class InputController : MonoBehaviour
     private InputAction _cameraZoomAction;
     private InputAction _shootingModeChangeAction;
     private InputAction _scoreAction;
+    private InputAction _escapeAction;
 
     private bool _inputUpdated;
 
-    private void Awake()
-    {
-        _inputActionAsset?.Enable();
-        InputActionMap actionMap = _inputActionAsset?.FindActionMap(_mapName) 
-                                   ?? _inputActionAsset?.FindActionMap("Default");
-        
-        _moveAction = actionMap?.FindAction(_moveName) 
-                      ?? actionMap?.FindAction("Move");
-        _jumpAction = actionMap?.FindAction(_jumpName) 
-                      ?? actionMap?.FindAction("Jump");
-        _cameraMoveAction = actionMap?.FindAction(_cameraMoveName) 
-                            ?? actionMap?.FindAction("CameraMove");
-        _cameraLockAction = actionMap?.FindAction(_cameraLockName)
-                            ?? actionMap?.FindAction("CameraLock");
-        _cameraChangeAction = actionMap?.FindAction(_cameraChangeName)
-                            ?? actionMap?.FindAction("CameraChange");
-        _explosionAction = actionMap?.FindAction(_explosionName)
-                           ?? actionMap?.FindAction("Explosion");
-        _shootAction = actionMap?.FindAction(_shootName)
-                       ?? actionMap?.FindAction("Shoot");
-        _cameraZoomAction = actionMap?.FindAction(_zoomName)
-                        ?? actionMap?.FindAction("CameraZoom");
-        _shootingModeChangeAction = actionMap?.FindAction(_shootingModeChangeName)
-                                    ?? actionMap?.FindAction("ShootingModeChange");
-        _scoreAction = actionMap?.FindAction(_scoreName)
-                                    ?? actionMap?.FindAction("ScoreInput");
-    }
+    private InputActionMap _actionMap;
 
     private void OnEnable()
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        
+        _inputActionAsset.Enable();
+        
+        _actionMap = _inputActionAsset?.FindActionMap(_mapName) 
+                     ?? _inputActionAsset?.FindActionMap("Default");
+        
+        _moveAction = _actionMap?.FindAction(_moveName) 
+                      ?? _actionMap?.FindAction("Move");
+        _jumpAction = _actionMap?.FindAction(_jumpName) 
+                      ?? _actionMap?.FindAction("Jump");
+        _cameraMoveAction = _actionMap?.FindAction(_cameraMoveName) 
+                            ?? _actionMap?.FindAction("CameraMove");
+        _cameraLockAction = _actionMap?.FindAction(_cameraLockName)
+                            ?? _actionMap?.FindAction("CameraLock");
+        _cameraChangeAction = _actionMap?.FindAction(_cameraChangeName)
+                              ?? _actionMap?.FindAction("CameraChange");
+        _explosionAction = _actionMap?.FindAction(_explosionName)
+                           ?? _actionMap?.FindAction("Explosion");
+        _shootAction = _actionMap?.FindAction(_shootName)
+                       ?? _actionMap?.FindAction("Shoot");
+        _cameraZoomAction = _actionMap?.FindAction(_zoomName)
+                            ?? _actionMap?.FindAction("CameraZoom");
+        _shootingModeChangeAction = _actionMap?.FindAction(_shootingModeChangeName)
+                                    ?? _actionMap?.FindAction("ShootingModeChange");
+        _scoreAction = _actionMap?.FindAction(_scoreName)
+                       ?? _actionMap?.FindAction("ScoreInput");
+        _escapeAction = _actionMap?.FindAction(_escapeName)
+                        ?? _actionMap?.FindAction("Escape");
         
         if (_inputActionAsset)
         {
@@ -107,6 +112,8 @@ public class InputController : MonoBehaviour
             _scoreAction.performed += ScorePerformedHandler;
             _scoreAction.canceled += ScoreCanceledHandler;
 
+            _escapeAction.performed += EscapePerformedHandler;
+
         }
         else
         {
@@ -120,13 +127,53 @@ public class InputController : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         
-        _inputActionAsset?.Disable();
+        _actionMap.Disable();
     }
 
     private void OnDestroy()
     {
+        _moveAction.performed -= MovePerformedHandler;
+        _moveAction.canceled -= MoveCanceledHandler;
+
+        _cameraMoveAction.performed -= CameraMovePerformedHandler;
+
+        _jumpAction.performed -= JumpPerformedHandler;
+        _jumpAction.canceled -= JumpCanceledHandler;
+
+        _cameraLockAction.performed -= CameraLockPerformedHandler;
+        _cameraLockAction.canceled -= CameraLockCanceledHandler;
+
+        _cameraChangeAction.performed -= CameraChangePerformedHandler;
+        _cameraChangeAction.canceled -= CameraChangeCanceledHandler;
+
+        _explosionAction.performed -= ExplosionPerformedHandler;
+        _explosionAction.canceled -= ExplosionCanceledHandler;
+
+        _shootAction.performed -= ShootPerformedHandler;
+        _shootAction.canceled -= ShootCanceledHandler;
+
+        _cameraZoomAction.performed -= CameraZoomPerformedHandler;
+        _cameraZoomAction.canceled -= CameraZoomCanceledHandler;
+
+        _shootingModeChangeAction.performed -= ShootingModeChangePerformedHandler;
+        _shootingModeChangeAction.canceled -= ShootingModeChangeCanceledHandler;
+
+        _scoreAction.performed -= ScorePerformedHandler;
+        _scoreAction.canceled -= ScoreCanceledHandler;
+
+        _escapeAction.performed -= EscapePerformedHandler;
+        
         OnMoveInput = null;
+        OnJumpInput = null;
         OnCameraMoveInput = null;
+        OnCameraLockInput = null;
+        OnCameraChangeInput = null;
+        OnExplosionInput = null;
+        OnShootInput = null;
+        OnCameraZoomInput = null;
+        OnShootingModeChange = null;
+        OnScoreInput = null;
+        OnEscapeInput = null;
     }
 
     private void MovePerformedHandler(InputAction.CallbackContext context)
@@ -212,9 +259,13 @@ public class InputController : MonoBehaviour
     {
         OnScoreInput?.Invoke(true);
     }
-
     private void ScoreCanceledHandler(InputAction.CallbackContext context)
     {
         OnScoreInput?.Invoke(false);
+    }
+
+    private void EscapePerformedHandler(InputAction.CallbackContext context)
+    {
+        OnEscapeInput?.Invoke(true);
     }
 }
