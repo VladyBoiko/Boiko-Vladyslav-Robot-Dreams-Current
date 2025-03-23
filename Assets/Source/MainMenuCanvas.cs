@@ -13,7 +13,6 @@ public class MainMenuCanvas : MonoBehaviour
     [SerializeField] private Button _quitButton;
     
     [SerializeField] private Canvas _mainMenuCanvas;
-    [SerializeField] private Canvas _settingsCanvas;   
     
     [SerializeField] private string _gameplaySceneName;
 
@@ -42,9 +41,10 @@ public class MainMenuCanvas : MonoBehaviour
 
     private void SettingsGameHandler()
     {
-        if (_settingsCanvas == null || _mainMenuCanvas == null) return;
-        _settingsCanvas.gameObject.SetActive(true);
-        _mainMenuCanvas.gameObject.SetActive(false);
+        if (SettingsCanvas.Instance != null)
+        {
+            SettingsCanvas.Instance.ShowSettings(_mainMenuCanvas);
+        }
     }
 
     private void QuitGameHandler()

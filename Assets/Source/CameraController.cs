@@ -25,6 +25,8 @@ public class CameraController : MonoBehaviour
         InputController.OnCameraMoveInput += CameraMoveHandler;
         InputController.OnCameraChangeInput += CameraChangeHandler;
         InputController.OnCameraZoomInput += CameraZoomInputHandler;
+
+        KeyboardMouseSettings.OnSettingsChanged += SettingsChangedHandler;
     }
 
     private void Update()
@@ -67,6 +69,11 @@ public class CameraController : MonoBehaviour
         _targetAimValue = performed ? 1f : 0f;
     }
 
+    private void SettingsChangedHandler()
+    {
+        _sensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 1f);
+    }
+    
     public void SetYawAnchor(Transform cameraYawAnchor)
     {
         _cameraYawAnchor.rotation = cameraYawAnchor.rotation = Quaternion.Euler(0f, _yaw, 0f);

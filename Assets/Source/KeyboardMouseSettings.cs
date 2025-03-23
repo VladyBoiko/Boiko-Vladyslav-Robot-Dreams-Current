@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public class KeyboardMouseSettings : MonoBehaviour
 {
+    public static event Action OnSettingsChanged;
+    
     [SerializeField] private Slider _sensitivitySlider;
     [SerializeField] private TMP_InputField _sensitivityInput;
     
@@ -24,6 +27,7 @@ public class KeyboardMouseSettings : MonoBehaviour
         _sensitivityInput.text = value.ToString("0.00");
         PlayerPrefs.SetFloat(SensitivityKey, value);
         PlayerPrefs.Save();
+        OnSettingsChanged?.Invoke();
     }
     
     private void OnInputValueChanged(string value)
@@ -39,5 +43,6 @@ public class KeyboardMouseSettings : MonoBehaviour
         {
             _sensitivityInput.text = _sensitivitySlider.value.ToString("0.00");
         }
+        OnSettingsChanged?.Invoke();
     }
 }

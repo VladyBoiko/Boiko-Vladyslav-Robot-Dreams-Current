@@ -5,8 +5,9 @@ using UnityEngine.UI;
 public class ExitGameMenuCanvas : MonoBehaviour
 {
     [SerializeField] private Canvas _canvas;
-        
+
     [SerializeField] private Button _confrimButton;
+    [SerializeField] private Button _settingsButton;
     [SerializeField] private Button _cancelButton;
     [SerializeField] private string _lobbySceneName;
     [SerializeField] private InputController _inputController;
@@ -26,6 +27,7 @@ public class ExitGameMenuCanvas : MonoBehaviour
     private void Awake()
     {
         _confrimButton.onClick.AddListener(ConfirmButtonHandler);
+        _settingsButton.onClick.AddListener(SettingsButtonHandler);
         _cancelButton.onClick.AddListener(CancelButtonHandler);
     }
 
@@ -47,6 +49,14 @@ public class ExitGameMenuCanvas : MonoBehaviour
         SceneManager.LoadSceneAsync(_lobbySceneName, LoadSceneMode.Single);
     }
 
+    private void SettingsButtonHandler()
+    {
+        if (SettingsCanvas.Instance != null)
+        {
+            SettingsCanvas.Instance.ShowSettings(_canvas);
+        }
+    }
+    
     private void CancelButtonHandler()
     {
         Enabled = false;
