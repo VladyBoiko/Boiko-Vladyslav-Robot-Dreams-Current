@@ -21,11 +21,16 @@ public class ExitGameMenuCanvas : MonoBehaviour
                 return;
             _canvas.enabled = value;
             _inputController.enabled = !value;
+            
+            Cursor.visible = value;
+            Cursor.lockState = value ? CursorLockMode.None : CursorLockMode.Locked;
         }
     }
         
     private void Awake()
     {
+        SettingsCanvas.Instance?.HideSettings(_canvas);
+        
         _confrimButton.onClick.AddListener(ConfirmButtonHandler);
         _settingsButton.onClick.AddListener(SettingsButtonHandler);
         _cancelButton.onClick.AddListener(CancelButtonHandler);

@@ -17,8 +17,8 @@ public class InputController : MonoBehaviour
     public static event Action<bool> OnEscapeInput;
 
     [SerializeField] private InputActionAsset _inputActionAsset;
-    
     [SerializeField] private string _mapName;
+    [SerializeField] private string _UIMapName;
     
     [SerializeField] private string _moveName;
     [SerializeField] private string _jumpName;
@@ -47,6 +47,7 @@ public class InputController : MonoBehaviour
     private bool _inputUpdated;
 
     private InputActionMap _actionMap;
+    private InputActionMap _UIActionMap;
 
     private void OnEnable()
     {
@@ -57,6 +58,8 @@ public class InputController : MonoBehaviour
         
         _actionMap = _inputActionAsset?.FindActionMap(_mapName) 
                      ?? _inputActionAsset?.FindActionMap("Default");
+        _UIActionMap = _inputActionAsset?.FindActionMap(_UIMapName)
+                     ?? _inputActionAsset?.FindActionMap("UI");
         
         _moveAction = _actionMap?.FindAction(_moveName) 
                       ?? _actionMap?.FindAction("Move");
@@ -78,8 +81,8 @@ public class InputController : MonoBehaviour
                                     ?? _actionMap?.FindAction("ShootingModeChange");
         _scoreAction = _actionMap?.FindAction(_scoreName)
                        ?? _actionMap?.FindAction("ScoreInput");
-        _escapeAction = _actionMap?.FindAction(_escapeName)
-                        ?? _actionMap?.FindAction("Escape");
+        _escapeAction = _UIActionMap?.FindAction(_escapeName)
+                        ?? _UIActionMap?.FindAction("Escape");
         
         if (_inputActionAsset)
         {

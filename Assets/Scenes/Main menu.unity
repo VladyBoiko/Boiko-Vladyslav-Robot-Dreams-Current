@@ -96,8 +96,10 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 348a6acf1271d2a4582747e148362e8c,
+    type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 8937ccd250eb0da4fa178b405ff41886,
+    type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -397,8 +399,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _backButton: {fileID: 104428455}
-  _mainMenuCanvas: {fileID: 1135046169}
   _settingsCanvas: {fileID: 227975569}
+  _inputActionAsset: {fileID: -944628639613478452, guid: df53c4265d5636c408af6702e13ecbef,
+    type: 3}
+  _UIMapName: UI
 --- !u!114 &227975571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2243,7 +2247,6 @@ MonoBehaviour:
   _settingsButton: {fileID: 2025805754}
   _quitButton: {fileID: 1535603217}
   _mainMenuCanvas: {fileID: 1135046169}
-  _settingsCanvas: {fileID: 227975569}
   _gameplaySceneName: Lection 12
 --- !u!223 &1135046169
 Canvas:

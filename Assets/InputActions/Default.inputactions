@@ -94,15 +94,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Escape",
-                    "type": "Button",
-                    "id": "3f557c51-75ce-422a-ba03-26f98b8fb696",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -259,10 +250,27 @@
                     "action": "ScoreInput",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
+                }
+            ]
+        },
+        {
+            "name": "UI",
+            "id": "e6076f32-4d47-4620-ac75-96f1545442f7",
+            "actions": [
+                {
+                    "name": "Escape",
+                    "type": "Button",
+                    "id": "3a4f2df3-3ae0-45df-9573-46bea0e996d9",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
                 {
                     "name": "",
-                    "id": "8da3a16d-1e11-4a44-be98-7755686b4582",
+                    "id": "120c1c87-6469-452e-9350-c57437dbf2e9",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",

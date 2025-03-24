@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class SettingsCanvas : MonoBehaviour
@@ -7,13 +8,23 @@ public class SettingsCanvas : MonoBehaviour
     [SerializeField] private Button _backButton;
     
     [SerializeField] private Canvas _settingsCanvas;
+    
+    [SerializeField] private InputActionAsset _inputActionAsset;
+    [SerializeField] private string _UIMapName;
 
+    private InputActionMap _UIActionMap;
+    
     private Canvas _previousCanvas;
     
     public static SettingsCanvas Instance { get; private set; }
     
     private void Awake()
     {
+        _inputActionAsset.Enable();
+        
+        _UIActionMap = _inputActionAsset?.FindActionMap(_UIMapName)
+                       ?? _inputActionAsset?.FindActionMap("UI");
+        
         if (Instance == null)
         {
             Instance = this;
@@ -35,6 +46,16 @@ public class SettingsCanvas : MonoBehaviour
         _previousCanvas = previousCanvas; 
         _previousCanvas.gameObject.SetActive(false);
         _settingsCanvas.gameObject.SetActive(true);
+        _UIActionMap.Disable();
+    }
+    
+    
+    public void HideSettings(Canvas previousCanvas)
+    {
+        _previousCanvas = previousCanvas; 
+        _previousCanvas.gameObject.SetActive(true);
+        _settingsCanvas.gameObject.SetActive(false);
+        _UIActionMap.Enable();
     }
     
     private void BackHandler()
@@ -43,6 +64,7 @@ public class SettingsCanvas : MonoBehaviour
         {
             _previousCanvas.gameObject.SetActive(true);
             _settingsCanvas.gameObject.SetActive(false);
+            _UIActionMap.Enable();
         }
     }
 }
