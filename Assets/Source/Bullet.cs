@@ -5,22 +5,27 @@ public class Bullet : MonoBehaviour
 {
     public static event Action<string, Collision> OnStaticHit;
     
-    private Rigidbody _rigidbody;
+    [SerializeField] private Rigidbody _rigidbody;
     
-    private void Awake()
+    // private void Awake()
+    // {
+    //     _rigidbody = GetComponent<Rigidbody>();
+    // }
+    
+    // public Bullet(Rigidbody bulletPrefab, Transform spawnPoint, float speed, float lifetime)
+    // {
+    //     _rigidbody = Instantiate(bulletPrefab, spawnPoint.position, spawnPoint.rotation);
+    //     
+    //     _rigidbody.AddForce(spawnPoint.forward * speed, ForceMode.Impulse);
+    //     
+    //     Destroy(_rigidbody.gameObject, lifetime);
+    // }
+
+    public void Initialize(float speed, float lifetime)
     {
-        _rigidbody = GetComponent<Rigidbody>();
+        _rigidbody.AddForce(transform.forward * speed, ForceMode.Impulse);
+        Destroy(gameObject, lifetime);
     }
-    
-    public Bullet(Rigidbody bulletPrefab, Transform spawnPoint, float speed, float lifetime)
-    {
-        _rigidbody = Instantiate(bulletPrefab, spawnPoint.position, spawnPoint.rotation);
-        
-        _rigidbody.AddForce(spawnPoint.forward * speed, ForceMode.Impulse);
-        
-        Destroy(_rigidbody.gameObject, lifetime);
-    }
-    
     
     private void OnCollisionEnter(Collision collision)
     {

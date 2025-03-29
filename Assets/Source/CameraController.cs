@@ -43,7 +43,7 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        _cameraPitchAnchor.localRotation = Quaternion.Euler(Mathf.Clamp(_pitch, -15f, 90f), 0f, 0f);
+        _cameraPitchAnchor.localRotation = Quaternion.Euler(_pitch, 0f, 0f);
         _cameraYawAnchor.rotation = Quaternion.Euler(0f, _yaw, 0f);
 
         _blaster.localRotation = _cameraPitchAnchor.localRotation;
@@ -52,7 +52,7 @@ public class CameraController : MonoBehaviour
     private void CameraMoveHandler(Vector2 cameraMoveInput)
     {
         cameraMoveInput *= _sensitivity;
-        _pitch -= cameraMoveInput.y;
+        _pitch = Mathf.Clamp(_pitch - cameraMoveInput.y, -15f, 90f);
         _yaw += cameraMoveInput.x;
     }
 

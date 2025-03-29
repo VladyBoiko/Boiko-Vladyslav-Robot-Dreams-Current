@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using Quaternion = System.Numerics.Quaternion;
 
 public class Shooter : MonoBehaviour
 {
@@ -36,7 +36,7 @@ public class Shooter : MonoBehaviour
     [SerializeField] protected float _decaySpeed;
     
     [Header("ObjectSpawnShoot Properties")]
-    [SerializeField] private Rigidbody _projectilePrefab;
+    [SerializeField] private Bullet _projectilePrefab;
     [SerializeField] private float _projectileSpeed;
     [SerializeField] private float _projectileLifetime;
     
@@ -128,10 +128,19 @@ public class Shooter : MonoBehaviour
         DrawShot(_hitPoint);
     }
     
+    // private void ObjectSpawnShoot()
+    // {
+    //     if (_projectilePrefab == null) return;
+    //     Bullet bullet = new Bullet(_projectilePrefab, _gunTransform, _projectileSpeed, _projectileLifetime);
+    // }
+    
     private void ObjectSpawnShoot()
     {
         if (_projectilePrefab == null) return;
-        Bullet bullet = new Bullet(_projectilePrefab, _gunTransform, _projectileSpeed, _projectileLifetime);
+
+        Bullet bullet = Instantiate(_projectilePrefab, _gunTransform.position, _gunTransform.rotation);
+
+        bullet.Initialize(_projectileSpeed, _projectileLifetime);
     }
 
     private void HandleBulletHit(string shootingModeName, Collision collision)
