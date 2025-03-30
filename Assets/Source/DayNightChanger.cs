@@ -1,15 +1,20 @@
+using System;
 using UnityEngine;
 
 public class DayNightChanger : MonoBehaviour
 {
     [SerializeField] private float _dayDuration;
+    
+    [Header("SunLight settings")]
     [SerializeField] private AnimationCurve _sunIntensityCurve;
-    [SerializeField] private AnimationCurve _moonIntensityCurve;
     [SerializeField] private Gradient _sunColorGradient;
-    [SerializeField] private Gradient _moonColorGradient;
     [SerializeField] private Light _sunLight;
+    
+    [Header("MoonLight settings")]
+    [SerializeField] private AnimationCurve _moonIntensityCurve;
+    [SerializeField] private Gradient _moonColorGradient;
     [SerializeField] private Light _moonLight;
-
+    
     // private float _currentRotation;
     private float _currentSunRotation;
     private float _currentMoonRotation;
@@ -17,42 +22,51 @@ public class DayNightChanger : MonoBehaviour
     private float _moonHeight;
     private bool _isDay;
     private float _timeMultiplier;
+    private const float TransitionAngle = 5f;
 
-    private const float TransitionAngle = 15f;
-
-    private float _time;
-
+    public bool IsDay
+    {
+        get => _isDay;
+        set
+        {
+            if (_isDay == value)
+                return;
+            _isDay = value;
+            Debug.Log(_isDay? "Day" : "Night");
+            
+            _sunLight.enabled = _isDay;
+            _moonLight.enabled = !_isDay;
+            
+            RenderSettings.sun = _isDay ? _sunLight : _moonLight;
+        }
+    }
+    
     private void Start()
     {
         float correctedDuration = _dayDuration * (180f / (180f - TransitionAngle));
         _timeMultiplier = 180f / correctedDuration;
         
-        _isDay = true;
-        _sunLight.enabled = true;
-        // _moonLight.enabled = false;
-        _moonLight.enabled = true;
-        _moonLight.intensity = 0.001f;
+        IsDay = true;
+        // Debug.Log($"Sun: {_sunLight.enabled}, moon: {_moonLight.enabled}, renderSettings: {RenderSettings.sun}");
     }
 
     private void Update()
     {
-        Debug.Log(Time.time);
+        // Debug.Log(Time.time);
         
-        if (_isDay)
+        if (IsDay)
         {
             SunChange();
             
             if (_currentSunRotation >= 180f - TransitionAngle)
             {
-                // if (!_moonLight.enabled) _moonLight.enabled = true;
+                // if(!_moonLight.enabled) _moonLight.enabled = true;
                 MoonChange();
             }
 
             if (_currentSunRotation >= 180f)
             {
-                _isDay = false;
-                // _sunLight.enabled = false;
-                _sunLight.intensity = 0.001f;
+                IsDay = false;
                 _currentSunRotation = 0f;
             }
         }
@@ -69,9 +83,7 @@ public class DayNightChanger : MonoBehaviour
             
             if (_currentMoonRotation >= 180f)
             {
-                _isDay = true;
-                // _moonLight.enabled = false;
-                _moonLight.intensity = 0.001f;
+                IsDay = true;
                 _currentMoonRotation = 0f;
             }
         }
