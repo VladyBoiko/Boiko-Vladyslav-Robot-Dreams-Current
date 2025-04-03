@@ -7,6 +7,7 @@ public class Dummy : MonoBehaviour
     [SerializeField] private float _regenerationDelayTime;
     
     private YieldInstruction _regenerationDelay;
+    private Coroutine _autoHealCoroutine;
 
     private void Start()
     {
@@ -38,6 +39,23 @@ public class Dummy : MonoBehaviour
 
     private void TakeDamageHandler(float newHealt)
     {
+        if (_autoHealCoroutine != null)
+            StopCoroutine(_autoHealCoroutine);
+        _autoHealCoroutine = StartCoroutine(AutoHealRoutine());
+        
         Debug.Log($"Taking damage. New health for {this.name}: {newHealt}");
+    }
+    
+    private IEnumerator AutoHealRoutine()
+    {
+        yield return new WaitForSeconds(3f);
+    
+        while (_health.HealthValue < _health.MaxHealthValue)
+        {
+            _health.Heal(1);
+            yield return new WaitForSeconds(1f);
+        }
+        
+        _autoHealCoroutine = null;
     }
 }

@@ -36,28 +36,26 @@ public class DamageDealer : MonoBehaviour
         int damage = _damage;
         int score = 0;
         
-        if (_healthSystem.GetHealth(hitCollider, out Health health))
+        if (_healthSystem.GetHealth(hitCollider, out HealthArea health))
         {
-            float hitHeight = hitPoint.y - hitCollider.bounds.min.y;
-            float headThreshold = hitCollider.bounds.size.y * 0.8f;
-
-            if (hitHeight >= headThreshold)
+            if (health.isCritical)
             {
-                damage *= 2;
+                damage = (int)(damage * health.damageMultiplier);
                 score = 2;
-                Debug.Log("Headshot!");
+                Debug.Log($"Critical Damage: {hitCollider}!");
             }
             else
             {
                 score = 1;
             }
-            health.TakeDamage(damage);
+            health.health.TakeDamage(damage);
             
             var popup = Instantiate(_damagePopupPrefab, hitPoint, Quaternion.identity);
             popup.Initialize(damage, _camera);
             
             Debug.Log($"{shootingModeName} hit: {hitCollider.name} at {hitPoint}.");
-            OnHit?.Invoke(health ? 1 : 0, score);
+            // OnHit?.Invoke(health.health ? 1 : 0, score);
+            OnHit?.Invoke(1, score);
         }
     }
 }

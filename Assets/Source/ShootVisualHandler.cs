@@ -5,6 +5,8 @@ using UnityEngine.Rendering.Universal;
 
 public class VisualHandler : MonoBehaviour
 {
+    public static event Action<GameObject> OnGlassHit;
+    
     [SerializeField] private Shooter _shooter;
 
     [Header("Muzzle Flash Settings")]
@@ -42,7 +44,9 @@ public class VisualHandler : MonoBehaviour
     
     private void HandleHit(string shootingMode, Vector3 hitPoint, Vector3 hitNormal, Collider hitCollider)
     {
-        if (_hitEffectPrefab)
+        string hitLayerName = LayerMask.LayerToName(hitCollider.gameObject.layer);
+        
+        if (_hitEffectPrefab && hitLayerName != "Glass")
         {
             DecalProjector decal = Instantiate(_hitEffectPrefab, hitPoint+hitNormal* 0.01f, Quaternion.LookRotation(-hitNormal), hitCollider.transform);
             
@@ -52,7 +56,6 @@ public class VisualHandler : MonoBehaviour
             }
             else
             {
-                string hitLayerName = LayerMask.LayerToName(hitCollider.gameObject.layer);
                 switch (hitLayerName)
                 {
                     case "Wood": decal.material = _woodMaterial; break;
@@ -63,6 +66,9 @@ public class VisualHandler : MonoBehaviour
 
             Destroy(decal.gameObject, _decalLifetime);
         }
+        
+        if(hitLayerName == "Glass")
+            OnGlassHit?.Invoke(hitCollider.gameObject);
     }
 
     private IEnumerator Flash(GameObject effect, float flashDuration)

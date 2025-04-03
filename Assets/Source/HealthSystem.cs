@@ -11,7 +11,7 @@ public class HealthSystem : MonoBehaviour
     
     [SerializeField] private Health[] _healths;
 
-    protected HashSet<Health> _charactersHealth = new();
+    protected Dictionary<Collider, HealthArea> _charactersHealth = new();
     
     
     // /// <summary>
@@ -41,15 +41,20 @@ public class HealthSystem : MonoBehaviour
             Health health = _healths[i];
             if (health == null) continue;
 
-            _charactersHealth.Add(health);
+            health.InitHealth(this);
+            
             health.OnDeath += () => CharacterDeathHandler(health);
         }
     }
 
-    public virtual bool GetHealth(Collider collider, out Health health)
+    public void AddHealthArea(Collider collider, HealthArea healthArea)
     {
-        health = collider.GetComponent<Health>();
-        return health != null && _charactersHealth.Contains(health);
+        _charactersHealth.Add(collider, healthArea);
+    }
+    
+    public virtual bool GetHealth(Collider collider, out HealthArea health)
+    {
+        return _charactersHealth.TryGetValue(collider, out health);
     }
 
     protected void CharacterDeathHandler(Health health)

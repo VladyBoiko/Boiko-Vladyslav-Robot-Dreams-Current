@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Health : MonoBehaviour
@@ -9,6 +10,8 @@ public class Health : MonoBehaviour
     public event Action<float> OnTakeDamage;
     
     [SerializeField] protected int _maxHealth;
+    [SerializeField] protected Collider[] _colliders;
+    [SerializeField] protected WeakpointData[] _weakpoints;
 
     private int _health;
     private bool _isAlive;
@@ -49,8 +52,28 @@ public class Health : MonoBehaviour
         SetHealth(MaxHealthValue);
     }
 
+    public void InitHealth(HealthSystem healthSystem)
+    {
+        for (int i = 0; i < _colliders.Length; i++)
+        {
+            healthSystem.AddHealthArea(_colliders[i], new HealthArea {health = this, isCritical = false, damageMultiplier = 1f});
+        }
+        
+        for (int i = 0; i < _weakpoints.Length; i++)
+        {
+            healthSystem.AddHealthArea(_weakpoints[i].collider, new HealthArea {health = this, isCritical = true, damageMultiplier = _weakpoints[i].damageMultiplier});
+        }
+    }
+    
+    public void SetHealth(int health)
+    {
+        HealthValue = Mathf.Clamp(health, 0, _maxHealth);
+        IsAlive = HealthValue > 0;
+    }
+    
     public void TakeDamage(int damage)
     {
+        
         if (!IsAlive || damage <= 0) return;
 
         HealthValue = Mathf.Clamp(HealthValue - damage, 0, _maxHealth);
@@ -65,11 +88,5 @@ public class Health : MonoBehaviour
         if (!IsAlive || heal <= 0) return;
         
         HealthValue = Mathf.Clamp(HealthValue + heal, 0, _maxHealth);
-    }
-
-    public void SetHealth(int health)
-    {
-        HealthValue = Mathf.Clamp(health, 0, _maxHealth);
-        IsAlive = HealthValue > 0;
     }
 }
