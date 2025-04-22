@@ -5,7 +5,8 @@ namespace DamageSystems
 {
     public class Bullet : MonoBehaviour
     {
-        public static event Action<string, Collision> OnStaticHit;
+        public event Action<string, Collision> OnStaticHit;
+        public event Action<Bullet> OnDestroyed;
     
         [SerializeField] private Rigidbody _rigidbody;
     
@@ -33,6 +34,11 @@ namespace DamageSystems
         {
             OnStaticHit?.Invoke("ObjectSpawn", collision);
             Destroy(_rigidbody.gameObject);
+        }
+        
+        private void OnDestroy()
+        {
+            OnDestroyed?.Invoke(this);
         }
     }
 }

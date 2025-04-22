@@ -1,12 +1,20 @@
 using UnityEngine;
+using System;
+using Services;
+using Random = UnityEngine.Random;
 
 namespace Enemy
 {
-    public class NavPointProviderZone : MonoBehaviour, INavPointProvider
+    public class NavPointProviderZone : MonoServiceBase, INavPointProvider
     {
         [SerializeField] private Vector3 _zoneSize = new Vector3(10f, 0f, 10f);
         [SerializeField] private Vector3 _zoneOffset = Vector3.zero;
+        
+        public Vector3 ZoneSize => _zoneSize;
+        public Vector3 ZoneOffset => _zoneOffset;
 
+        public override Type Type { get; } = typeof(NavPointProviderZone);
+        
         public Vector3 GetPoint()
         {
             Vector3 center = transform.position + _zoneOffset;

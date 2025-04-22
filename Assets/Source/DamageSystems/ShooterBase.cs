@@ -15,27 +15,26 @@ namespace DamageSystems
         [SerializeField] protected float _projectileSpeed;
         [SerializeField] protected float _projectileLifetime;
 
-        protected virtual void OnEnable()
-        {
-            Bullet.OnStaticHit += HandleBulletHit;
-        }
-
-        protected virtual void OnDisable()
-        {
-            Bullet.OnStaticHit -= HandleBulletHit;
-        }
-
         public void ObjectSpawnShoot()
         {
             if (_projectilePrefab == null) return;
 
             Bullet bullet = Instantiate(_projectilePrefab, _gunTransform.position, _gunTransform.rotation);
             bullet.Initialize(_projectileSpeed, _projectileLifetime);
+            
+            bullet.OnStaticHit += HandleBulletHit;
+            bullet.OnDestroyed += HandleBulletDestroyed;
         }
 
         private void HandleBulletHit(string shootingModeName, Collision collision)
         {
             OnHit?.Invoke(shootingModeName, collision.contacts[0].point, collision.contacts[0].normal, collision.collider);
+        }
+        
+        private void HandleBulletDestroyed(Bullet bullet)
+        {
+            bullet.OnStaticHit -= HandleBulletHit;
+            bullet.OnDestroyed -= HandleBulletDestroyed;
         }
 
         protected void InvokeShot() => OnShot?.Invoke();

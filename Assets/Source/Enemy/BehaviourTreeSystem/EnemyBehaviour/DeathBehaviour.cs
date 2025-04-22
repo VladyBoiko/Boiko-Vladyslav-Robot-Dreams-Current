@@ -22,6 +22,7 @@ namespace Enemy.BehaviourTreeSystem.EnemyBehaviour
         public override void Enter()
         {
             base.Enter();
+            
             _time = 0f;
             _reciprocal = 1f / enemyController.Data.HealthBarDelayTime;
         }
@@ -38,9 +39,17 @@ namespace Enemy.BehaviourTreeSystem.EnemyBehaviour
             }
 
             EvaluateFall(1f);
-            Object.Destroy(enemyController.RootObject);
+            // Object.Destroy(enemyController.RootObject);
+            // enemyController.gameObject.SetActive(false);
         }
 
+        public override void Exit()
+        {
+            base.Exit();
+            
+            enemyController.MeshRendererTransform.SetLocalPositionAndRotation(_regularPosition, _regularRotation);
+        }
+        
         private void EvaluateFall(float progress)
         {
             float curveFactor = enemyController.Data.FallCurve.Evaluate(progress);
@@ -52,6 +61,7 @@ namespace Enemy.BehaviourTreeSystem.EnemyBehaviour
             // Debug.Log($"Fall progress: {progress}, Position: {position}, Rotation: {rotation}");
             
             enemyController.MeshRendererTransform.SetLocalPositionAndRotation(position, rotation);
+            enemyController.CharacterController.enabled = false;
         }
 
         public override void Dispose()

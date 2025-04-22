@@ -1,18 +1,25 @@
 using Cinemachine;
 using Player;
+using Services;
 using UnityEngine;
+using System;
 
 namespace CameraSystem
 {
-    public class CameraController : MonoBehaviour
+    public class CameraController : MonoServiceBase
     {
         [SerializeField] private Transform _cameraYawAnchor;
         [SerializeField] private Transform _cameraPitchAnchor;
         [SerializeField] private float _sensitivity;
         [SerializeField] private Transform _blaster;
+        [SerializeField] private Camera _camera;
         [SerializeField] private CinemachineMixingCamera _mixingCamera;
         [SerializeField] private float _aimSpeed;
 
+        public override Type Type { get; } = typeof(CameraController);
+        
+        public Camera Camera => _camera;
+        
         private bool _isFirstPerson;
         private float _aimValue;
         private float _targetAimValue;
@@ -20,6 +27,12 @@ namespace CameraSystem
 
         private float _yaw;
         private float _pitch = 30f;
+
+        private void OnEnable()
+        {
+            if (!_camera)
+                _camera = gameObject.GetComponent<Camera>();
+        }
 
         private void Start()
         {

@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using Player;
+using Services;
 using UnityEngine;
 
 namespace Enemy
@@ -16,8 +19,9 @@ namespace Enemy
         [SerializeField] private float _range;
         [SerializeField] private float _angle;
         [SerializeField] private PlayerController _playerController;
+        [SerializeField] private LayerMask _rayMask;
 
-        [SerializeField, /*ReadOnly*/] private Collider[] _playerColliders;
+        [SerializeField, /*ReadOnly*/] private List<Collider> _playerColliders;
         
         private float _cosine;
         
@@ -33,10 +37,9 @@ namespace Enemy
         [ContextMenu("Find Player Colliders")]
         private void FindPlayerColliders()
         {
+            _playerColliders.AddRange(_playerController.GetComponentsInChildren<Collider>());
             
-            _playerColliders = _playerController.GetComponentsInChildren<Collider>();
-            
-            Debug.Log($"Found {_playerColliders.Length} colliders for {gameObject.name}:");
+            Debug.Log($"Found {_playerColliders.Count} colliders for {gameObject.name}:");
             foreach (Collider collider in _playerColliders)
             {
                 Debug.Log(collider.gameObject.name);
@@ -61,12 +64,18 @@ namespace Enemy
         public Vector3 LastTargetPosition => _lastTargetPosition;
         public PlayerController PlayerController => _playerController;
         
+
         private void Start()
         {
+            _playerController = ServiceLocator.Instance.GetService<PlayerController>();
+            
             _transform = transform;
             _cosine = Mathf.Cos(_angle * Mathf.Deg2Rad);
 
             _enemyController.Health.OnHealthChanged += HealthChangedHandler;
+            
+            // FindPlayerColliders();
+            _playerColliders.Add(_playerController.CharacterController);
         }
 
         private void FixedUpdate()
@@ -180,7 +189,8 @@ namespace Enemy
                     return false;
             }
 
-            if (!Physics.Raycast(position, (playerPosition - position).normalized, out RaycastHit hit, _range))
+            if (!Physics.Raycast(position, (playerPosition - position).normalized, out RaycastHit hit, 
+                    _range, _rayMask, QueryTriggerInteraction.Ignore))
             {
                 Debug.Log("Raycast hit nothing");
                 return false;
@@ -198,7 +208,7 @@ namespace Enemy
             //         return true;
             // }
 
-            for (int i = 0; i < _playerColliders.Length; i++)
+            for (int i = 0; i < _playerColliders.Count; i++)
             {
                 if(hit.collider == _playerColliders[i])
                     return true;
@@ -207,6 +217,14 @@ namespace Enemy
             return false;
         }
 
+        public void ResetRadar()
+        {
+            _currentTarget = null;
+            _hasTarget = false;
+            _seesTarget = false;
+            _currentState = State.Scanning;
+        }
+        
         private void HealthChangedHandler(int health)
         {
             LookAround();

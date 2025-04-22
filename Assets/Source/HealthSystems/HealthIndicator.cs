@@ -19,7 +19,7 @@ namespace HealthSystems
     
         public BillboardBase Billboard => _billboard;
         
-        private void Start()
+        private void OnEnable()
         {
             _displayedDamage = _displayedHealth = _targetHealth = _health.HealthValue01;
             _health.OnHealthChanged01 += HealthChangedHandler;

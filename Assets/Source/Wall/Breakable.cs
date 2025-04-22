@@ -41,7 +41,7 @@ public class Breakable : MonoBehaviour
         
         _objectBrakingStages[_hits].SetActive(false);
         _hits++;
-        Debug.Log(_hits);
+        // Debug.Log(_hits);
         
         if (_hits < _objectBrakingStages.Length)
         {

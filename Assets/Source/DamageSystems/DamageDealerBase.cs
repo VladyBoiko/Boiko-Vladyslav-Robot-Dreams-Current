@@ -2,6 +2,7 @@ using System;
 using Enemy;
 using Enemy.BehaviourTreeSystem.EnemyBehaviour;
 using HealthSystems;
+using Services;
 using UnityEngine;
 
 namespace DamageSystems
@@ -13,9 +14,18 @@ namespace DamageSystems
         // [SerializeField] protected Shooter _shooter;
         [SerializeField] protected ShooterBase _shooter;
         [SerializeField] protected int _damage;
+        [SerializeField] protected int _railGunDamage;
         [SerializeField] protected HealthSystem _healthSystem;
+        
+        private MeleeAttackBehaviour _meleeAttackBehaviour;
+        protected string _currentHitMode;
 
         public ShooterBase Shooter => _shooter;
+
+        private void Awake()
+        {
+            _healthSystem = ServiceLocator.Instance.GetService<HealthSystem>();
+        }
 
         protected virtual void OnEnable()
         {
@@ -27,22 +37,34 @@ namespace DamageSystems
             }
 
             _shooter.OnHit += HitInputHandler;
-            MeleeAttackBehaviour.OnMeleeAttackHit += HitInputHandler;
+            if (_meleeAttackBehaviour != null)
+                _meleeAttackBehaviour.OnMeleeAttackHit += HitInputHandler;
         }
 
         protected virtual void OnDisable()
         {
             _shooter.OnHit -= HitInputHandler;
-            MeleeAttackBehaviour.OnMeleeAttackHit -= HitInputHandler;
+            if (_meleeAttackBehaviour != null)
+                _meleeAttackBehaviour.OnMeleeAttackHit -= HitInputHandler;
         }
 
-        private void HitInputHandler(string mode, Vector3 point, Vector3 normal, Collider collider)
+        public void SetMeleeAttackBehaviour(MeleeAttackBehaviour meleeAttackBehaviour)
         {
-            if (_healthSystem.GetHealth(collider, out HealthArea health) && 
-                !(collider.transform.root == _shooter.transform.root))
+            _meleeAttackBehaviour = meleeAttackBehaviour;
+        }
+        
+        private void HitInputHandler(string mode, Vector3 point, Vector3 normal, Collider collider)
+        { 
+            if(_shooter == null) return;
+            
+            if (collider.transform.root == _shooter.transform.root)
+                return; 
+            
+            if (_healthSystem.GetHealth(collider, out HealthArea health))
             {
                 Debug.Log($"Collision with: {collider.gameObject.name}");
                 
+                _currentHitMode = mode;
                 HandleDamage(health, point, collider);
             }
         }

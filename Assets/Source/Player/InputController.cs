@@ -1,10 +1,11 @@
 using System;
+using Services;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Player
 {
-    public class InputController : MonoBehaviour
+    public class InputController : MonoServiceBase
     {
         public static event Action<Vector2> OnMoveInput;
         public static event Action<bool> OnJumpInput;
@@ -17,6 +18,7 @@ namespace Player
         public static event Action<bool> OnShootingModeChange;
         public static event Action<bool> OnScoreInput;
         public static event Action<bool> OnEscapeInput;
+        public event Action OnInteract;
 
         [SerializeField] private InputActionAsset _inputActionAsset;
         [SerializeField] private string _mapName;
@@ -33,6 +35,7 @@ namespace Player
         [SerializeField] private string _shootingModeChangeName;
         [SerializeField] private string _scoreName;
         [SerializeField] private string _escapeName;
+        [SerializeField] private string _interactName;
    
         private InputAction _moveAction;
         private InputAction _jumpAction;
@@ -45,12 +48,15 @@ namespace Player
         private InputAction _shootingModeChangeAction;
         private InputAction _scoreAction;
         private InputAction _escapeAction;
+        private InputAction _interactAction;
 
         private bool _inputUpdated;
 
         private InputActionMap _actionMap;
         private InputActionMap _UIActionMap;
 
+        public override Type Type { get; } = typeof(InputController);
+        
         private void OnEnable()
         {
             Cursor.visible = false;
@@ -83,6 +89,8 @@ namespace Player
                                         ?? _actionMap?.FindAction("ShootingModeChange");
             _scoreAction = _actionMap?.FindAction(_scoreName)
                            ?? _actionMap?.FindAction("ScoreInput");
+            _interactAction = _actionMap?.FindAction(_interactName)
+                              ?? _actionMap?.FindAction("Interact");
             _escapeAction = _UIActionMap?.FindAction(_escapeName)
                             ?? _UIActionMap?.FindAction("Escape");
         
@@ -119,6 +127,7 @@ namespace Player
 
                 _escapeAction.performed += EscapePerformedHandler;
 
+                _interactAction.performed += InteractPerformedHandler;
             }
             else
             {
@@ -133,10 +142,13 @@ namespace Player
             Cursor.lockState = CursorLockMode.None;
         
             _actionMap.Disable();
+            _UIActionMap.Disable();
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
+            
             _moveAction.performed -= MovePerformedHandler;
             _moveAction.canceled -= MoveCanceledHandler;
 
@@ -167,6 +179,8 @@ namespace Player
             _scoreAction.canceled -= ScoreCanceledHandler;
 
             _escapeAction.performed -= EscapePerformedHandler;
+
+            _interactAction.performed -= InteractPerformedHandler;
         
             OnMoveInput = null;
             OnJumpInput = null;
@@ -179,8 +193,10 @@ namespace Player
             OnShootingModeChange = null;
             OnScoreInput = null;
             OnEscapeInput = null;
+            OnInteract = null;
         }
-
+        
+        
         private void MovePerformedHandler(InputAction.CallbackContext context)
         {
             OnMoveInput?.Invoke(context.ReadValue<Vector2>());
@@ -272,6 +288,11 @@ namespace Player
         private void EscapePerformedHandler(InputAction.CallbackContext context)
         {
             OnEscapeInput?.Invoke(true);
+        }
+
+        private void InteractPerformedHandler(InputAction.CallbackContext context)
+        {
+            OnInteract?.Invoke();
         }
     }
 }

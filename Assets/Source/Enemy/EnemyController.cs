@@ -1,10 +1,14 @@
+using System;
 using System.Collections.Generic;
+using BillBoards;
 using DamageSystems;
 using Enemy.BehaviourTreeSystem;
 using Enemy.BehaviourTreeSystem.EnemyBehaviour;
 using HealthSystems;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
+using Services;
 
 namespace Enemy
 {
@@ -22,14 +26,15 @@ namespace Enemy
         [SerializeField] private Transform _weaponTransform;
         // [SerializeField] private Shooter _shooter;
         [SerializeField] private EnemyShooter _shooter;
+        [SerializeField] private DamageDealerBase _damageDealer;
         [SerializeField] private WeaponData _weaponData;
 
         [SerializeField] private PlayerRadar _playerRadar;
-
-        [SerializeField] private NavPointProviderZone _navPointProvider;
         
-        [SerializeField, /*ReadOnly*/] private float _patrolStamina;
-        [SerializeField, /*ReadOnly*/] private EnemyBehaviour _currentBehaviour;
+        [SerializeField] private BillboardBase _billboard;
+        
+        /*[SerializeField, /*ReadOnly#1#]*/ private float _patrolStamina;
+        /*[SerializeField, /*ReadOnly#1#]*/ private EnemyBehaviour _currentBehaviour;
         
         protected BehaviourTree _behaviourTree;
         // protected StateMachine _behaviourMachine;
@@ -47,7 +52,7 @@ namespace Enemy
         
         public EnemyData Data => _data;
         public NavMeshAgent NavMeshAgent => _navMeshAgent;
-        public INavPointProvider NavPointProvider => _navPointProvider;
+        // public INavPointProvider NavPointProvider => _navPointProvider;
         public CharacterController CharacterController => _characterController;
         public Transform CharacterTransform => _characterTransform;
         public Health Health => _health;
@@ -58,8 +63,11 @@ namespace Enemy
         public Transform WeaponTransform => _weaponTransform;
         // public Shooter Shooter => _shooter;
         public EnemyShooter Shooter => _shooter;
+        public DamageDealerBase DamageDealer => _damageDealer;
         public WeaponData WeaponData => _weaponData;
         
+        public BillboardBase Billboard => _billboard;
+
         private void Awake()
         {
             _navMeshAgent.updatePosition = false;
@@ -71,12 +79,24 @@ namespace Enemy
             // RestorePatrolStamina();
             
             InitStates();
-            InitBehaviourTree();
             // Initialize(_navPointProvider, Camera.main);
-        
-            _health.OnDeath += HealthDeathHandler;
         }
-        
+
+        private void OnEnable()
+        {
+            _health.OnDeath += HealthDeathHandler;
+            
+            _characterController.enabled = true;
+            _playerRadar.ResetRadar();
+            _patrolStamina = 0;
+            InitBehaviourTree();
+        }
+
+        private void OnDisable()
+        {
+            _health.OnDeath -= HealthDeathHandler;
+        }
+
         private void FixedUpdate()
         {
             ComputeBehaviour();
@@ -113,8 +133,10 @@ namespace Enemy
                     new DecisionBehaviour((byte)EnemyBehaviour.Deciding, this) },
                 { (byte)EnemyBehaviour.Idle, 
                     new IdleBehaviour((byte)EnemyBehaviour.Idle, this) },
+                // { (byte)EnemyBehaviour.Patrol, 
+                //     new PatrolBehaviour((byte)EnemyBehaviour.Patrol, this) },
                 { (byte)EnemyBehaviour.Patrol, 
-                    new PatrolBehaviour((byte)EnemyBehaviour.Patrol, this) },
+                    new ChaseBehaviour((byte)EnemyBehaviour.Patrol, this) },
                 { (byte)EnemyBehaviour.Search, 
                     new SearchBehaviour((byte)EnemyBehaviour.Search, this) },
                 { (byte)EnemyBehaviour.Attack, 
@@ -210,6 +232,8 @@ namespace Enemy
         {
             _behaviourTree = null;
             
+            Debug.Log($"[EnemyController] HealthDeathHandler: {name} died! Alive = {_health.IsAlive}");
+            
             if (_behaviourStates.TryGetValue((byte)EnemyBehaviour.Death, out var deathState))
             {
                 Debug.Log("Death");
@@ -218,6 +242,8 @@ namespace Enemy
                 _currentState = deathState;
                 _currentState.Enter();
             }
+            
+            _health.HealthSystem.InvokeCharacterDeath(_health);
             
             // _health.UnregisterFromSystem();
             //     _behaviourMachine.ForceState((byte)EnemyBehaviour.Death);

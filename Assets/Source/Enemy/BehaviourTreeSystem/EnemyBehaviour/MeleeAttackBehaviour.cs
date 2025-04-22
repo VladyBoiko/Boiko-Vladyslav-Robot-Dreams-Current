@@ -6,7 +6,7 @@ namespace Enemy.BehaviourTreeSystem.EnemyBehaviour
 {
     public class MeleeAttackBehaviour : BehaviourStateBase
     {
-        public static event Action<string, Vector3, Vector3, Collider> OnMeleeAttackHit;
+        public event Action<string, Vector3, Vector3, Collider> OnMeleeAttackHit;
         
         private readonly NavMeshAgent _agent;
         private readonly CharacterController _characterController;
@@ -147,7 +147,8 @@ namespace Enemy.BehaviourTreeSystem.EnemyBehaviour
             Vector3 hitPoint = target.TargetPivot.position;
             Vector3 direction = (hitPoint - _characterTransform.position).normalized;
             Vector3 normal = -direction;
-            Collider hitCollider = target.TargetPivot.GetComponentInParent<CharacterController>();
+            // Collider hitCollider = target.TargetPivot.GetComponentInParent<CharacterController>();
+            Collider hitCollider = enemyController.Playerdar.PlayerController.CharacterController;
 
             OnMeleeAttackHit?.Invoke("MeleeAttack", hitPoint, normal, hitCollider);
         }

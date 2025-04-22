@@ -1,32 +1,38 @@
 using Enemy;
 using HealthSystems;
+using Services;
 using UnityEngine;
+using System;
 
 namespace Player
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoServiceBase
     {
         [SerializeField] private CharacterController _controller;
         [SerializeField] private TargetableBase _targetable;
         [SerializeField] private Health _health;
         [SerializeField] private float _speed;
     
+        public override Type Type { get; } = typeof(PlayerController);
+        
         private Transform _transform;
         private Vector2 _moveInput;
         
         public CharacterController CharacterController => _controller;
         public TargetableBase Targetable => _targetable;
         public Health Health => _health;
-
+        
         private void Start()
         {
             InputController.OnMoveInput += MoveHandler;
             _transform = transform;
             if (_controller) return;
-            Debug.LogError("No CharacterController attached");
+                Debug.LogError("No CharacterController attached");
             enabled = false;
         }
 
+        
+        
         private void FixedUpdate()
         {
             Vector3 forward = _transform.forward;

@@ -1,13 +1,16 @@
 using System;
 using DamageSystems;
 using HealthSystems;
+using Services;
 using UnityEngine;
 
 namespace CanvasSystem.Score
 {
-    public class ScoreSystem : MonoBehaviour
+    public class ScoreSystem : MonoServiceBase
     {
         public event Action OnDataUdpated;
+        
+        public override Type Type { get; } = typeof(ScoreSystem);
         
         [SerializeField] private HealthSystem _healthSystem;
         // [SerializeField] private DamageDealer _damageDealer;
@@ -38,7 +41,7 @@ namespace CanvasSystem.Score
         private void HitHandler(int hits, int score)
         {
             _hitCount += hits;
-            _score += score;
+            // _score += score;
             OnDataUdpated?.Invoke();
         }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using HealthSystems;
+using Services;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,32 +15,18 @@ namespace Player
         [SerializeField] private AnimationCurve _fallCurve;   
         [SerializeField] private GameObject _rootObject;       
         [SerializeField] private float _healthBarDelayTime;
-        [SerializeField] private Canvas _hudCanvas;
-        
-        [SerializeField] private string _lobbySceneName;
         
         private Vector3 _fallMarkPosition;                      
         private Quaternion _fallMarkRotation;                   
-        private PlayerController _playerController;
-
-        private void Awake()
-        {
-            if(String.IsNullOrEmpty(_lobbySceneName)) 
-                _lobbySceneName = "Main menu";
-        }
 
         private void Start()
         {
             _health.OnDeath += DeathHandler;                    
             _fallMark.GetLocalPositionAndRotation(out _fallMarkPosition, out _fallMarkRotation);
-            _playerController = GetComponent<PlayerController>();  
         }
 
         private void DeathHandler()
         {
-            if (_playerController != null)
-                _playerController.enabled = false;
-            
             StartCoroutine(DelayedDestroy());
         }
         
@@ -58,11 +45,9 @@ namespace Player
             EvaluateFall(1f);
             
             // Destroy(_rootObject);
-            _rootObject.SetActive(false);
+            // _rootObject.SetActive(false);
             
-            _hudCanvas.enabled = false;
-            
-            SceneManager.LoadSceneAsync(_lobbySceneName, LoadSceneMode.Single);
+            // SceneManager.LoadSceneAsync(_lobbySceneName, LoadSceneMode.Single);
         }
         
         private void EvaluateFall(float progress)

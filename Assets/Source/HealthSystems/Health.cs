@@ -17,6 +17,7 @@ namespace HealthSystems
 
         private int _health;
         private bool _isAlive;
+        private bool _isInitialized = false;
         
         public HealthSystem HealthSystem;
         
@@ -51,14 +52,17 @@ namespace HealthSystems
     
         public float HealthValue01 => _maxHealth > 0 ? (HealthValue / (float)_maxHealth) : 0f;
         public int MaxHealthValue => _maxHealth;
+        public bool IsInitialized => _isInitialized;
 
-        protected virtual void Awake()
+        protected virtual void OnEnable()
         {
             SetHealth(MaxHealthValue);
         }
 
         public void InitHealth(HealthSystem healthSystem)
         {
+            _isInitialized = true;
+            
             HealthSystem = healthSystem;
             
             for (int i = 0; i < _colliders.Length; i++)
@@ -70,6 +74,8 @@ namespace HealthSystems
             {
                 healthSystem.AddHealthArea(_weakpoints[i].collider, new HealthArea {health = this, isCritical = true, damageMultiplier = _weakpoints[i].damageMultiplier});
             }
+            
+            SetHealth(_maxHealth);
         }
     
         public void SetHealth(int health)

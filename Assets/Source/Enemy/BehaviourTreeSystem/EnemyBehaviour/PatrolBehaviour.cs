@@ -1,3 +1,4 @@
+using Services;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,6 +10,7 @@ namespace Enemy.BehaviourTreeSystem.EnemyBehaviour
         private readonly CharacterController _characterController;
         private readonly Transform _characterTransform;
 
+        private NavPointProviderZone _navPointProviderZone;
         public PatrolBehaviour(byte stateId, EnemyController enemyController)
             : base(stateId, enemyController)
         {
@@ -22,7 +24,9 @@ namespace Enemy.BehaviourTreeSystem.EnemyBehaviour
             base.Enter();
 
             _agent.speed = enemyController.Data.PatrolSpeed;
-            _agent.SetDestination(enemyController.NavPointProvider.GetPoint());
+            // _agent.SetDestination(enemyController.NavPointProvider.GetPoint());
+            _navPointProviderZone = ServiceLocator.Instance.GetService<NavPointProviderZone>();
+            _agent.SetDestination(_navPointProviderZone.GetPoint());
         }
 
         public override void Update(float deltaTime)

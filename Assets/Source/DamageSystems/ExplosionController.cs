@@ -33,7 +33,8 @@ namespace DamageSystems
         {
             Ray ray = new Ray(_cameraTransform.position, _cameraTransform.forward);
             Vector3 _hitPoint = _cameraTransform.position + _cameraTransform.forward * _rayDistance;
-            if (Physics.Raycast(ray, out RaycastHit hitInfo, _rayDistance, _rayMask) && performed)
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, _rayDistance, _rayMask, QueryTriggerInteraction.Ignore)
+                && performed)
             {
                 _hitPoint = hitInfo.point;
 

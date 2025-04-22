@@ -38,11 +38,9 @@ namespace DamageSystems
 
         private void HandleShot()
         {
-            if (_muzzleFlashPrefab && _muzzleFlashPoint)
-            {
-                GameObject muzzleFlash = Instantiate(_muzzleFlashPrefab, _muzzleFlashPoint.position, _muzzleFlashPoint.rotation, _muzzleFlashPoint);
-                StartCoroutine(Flash(muzzleFlash, _muzzleFlashDuration));
-            }
+            if (!_muzzleFlashPrefab || !_muzzleFlashPoint) return;
+            GameObject muzzleFlash = Instantiate(_muzzleFlashPrefab, _muzzleFlashPoint.position, _muzzleFlashPoint.rotation, _muzzleFlashPoint);
+            StartCoroutine(Flash(muzzleFlash, _muzzleFlashDuration));
         }
     
         private void HandleHit(string shootingMode, Vector3 hitPoint, Vector3 hitNormal, Collider hitCollider)

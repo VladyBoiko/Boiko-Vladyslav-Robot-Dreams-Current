@@ -27,26 +27,42 @@ namespace Player
         [SerializeField] private float _shotVisualDiameter;
         [SerializeField] private string _tilingName;
         [SerializeField] private float _decaySpeed;
+        
+        [Header("Railgun Charge Settings")]
+        [SerializeField] private float _maxChargeTime = 2f;
+        [SerializeField] private float _chargeRate = 1f;
 
         private int _tilingId;
         private Vector3 _hitPoint;
 
-        protected override void OnEnable()
+        private bool _isCharging;
+        private float _currentCharge;
+        
+        public float CurrentChargeNormalized => Mathf.Clamp01(_currentCharge / _maxChargeTime);
+        
+        protected void OnEnable()
         {
-            base.OnEnable();
             _tilingId = Shader.PropertyToID(_tilingName);
 
             InputController.OnShootingModeChange += ShootingModeChangeHandler;
             InputController.OnShootInput += ShootInputHandler;
         }
 
-        protected override void OnDisable()
+        protected void OnDisable()
         {
-            base.OnDisable();
             InputController.OnShootingModeChange -= ShootingModeChangeHandler;
             InputController.OnShootInput -= ShootInputHandler;
         }
 
+        private void Update()
+        {
+            if (_isCharging)
+            {
+                ChargeWeapon();
+            }
+        }
+
+        
         private void ShootingModeChangeHandler(bool performed)
         {
             if (performed)
@@ -55,25 +71,94 @@ namespace Player
             }
         }
 
+        // private void ShootInputHandler(bool performed)
+        // {
+        //     if (!performed) return;
+        //
+        //     switch (_shootingMode)
+        //     {
+        //         case ShootingMode.RayCast: RaycastShoot(); break;
+        //         case ShootingMode.SphereCast: SphereCastShoot(); break;
+        //         case ShootingMode.ObjectSpawn: ObjectSpawnShoot(); break;
+        //     }
+        //
+        //     InvokeShot();
+        // }
+        
         private void ShootInputHandler(bool performed)
         {
-            if (!performed) return;
-
             switch (_shootingMode)
             {
-                case ShootingMode.RayCast: RaycastShoot(); break;
-                case ShootingMode.SphereCast: SphereCastShoot(); break;
-                case ShootingMode.ObjectSpawn: ObjectSpawnShoot(); break;
+                case ShootingMode.RayCast:
+                case ShootingMode.SphereCast:
+                    HandleChargeInput(performed);
+                    break;
+                case ShootingMode.ObjectSpawn:
+                    if (performed)
+                    {
+                        Shoot();
+                    }
+                    break;
+            }
+        }
+
+        private void HandleChargeInput(bool performed)
+        {
+            if (performed)
+            {
+                _isCharging = true;
+            }
+            else
+            {
+                if (_currentCharge < _maxChargeTime)
+                {
+                    ResetCharge();
+                }
+            }
+        }
+
+        private void ChargeWeapon()
+        {
+            _currentCharge += _chargeRate * Time.deltaTime;
+
+            if (_currentCharge >= _maxChargeTime)
+            {
+                Shoot();
+                ResetCharge();
+            }
+        }
+
+        private void ResetCharge()
+        {
+            _currentCharge = 0f;
+            _isCharging = false;
+        }
+        
+        private void Shoot()
+        {
+            switch (_shootingMode)
+            {
+                case ShootingMode.RayCast:
+                    RaycastShoot();
+                    break;
+                case ShootingMode.SphereCast:
+                    SphereCastShoot();
+                    break;
+                case ShootingMode.ObjectSpawn:
+                    ObjectSpawnShoot();
+                    break;
             }
 
             InvokeShot();
         }
 
+        
         private void RaycastShoot()
         {
             Ray ray = new Ray(_cameraTransform.position, _cameraTransform.forward);
             _hitPoint = _cameraTransform.position + _cameraTransform.forward * _rayDistance;
-            if (Physics.Raycast(ray, out var hitInfo, _rayDistance, _rayMask))
+            
+            if (Physics.Raycast(ray, out var hitInfo, _rayDistance, _rayMask, QueryTriggerInteraction.Ignore))
             {
                 _hitPoint = hitInfo.point;
                 InvokeHit("Raycast", hitInfo.point, hitInfo.normal, hitInfo.collider);
@@ -86,7 +171,7 @@ namespace Player
             Ray ray = new Ray(_gunTransform.position, _gunTransform.forward);
             _hitPoint = _gunTransform.position + _gunTransform.forward * _rayDistance;
 
-            if (Physics.SphereCast(ray, _shotRadius, out var hitInfo, _rayDistance, _rayMask))
+            if (Physics.SphereCast(ray, _shotRadius, out var hitInfo, _rayDistance, _rayMask, QueryTriggerInteraction.Ignore))
             {
                 Vector3 direct = hitInfo.point - _gunTransform.position;
                 Vector3 projected = Vector3.Project(direct, ray.direction);

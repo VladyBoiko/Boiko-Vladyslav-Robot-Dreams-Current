@@ -14,14 +14,21 @@ namespace Player
             int damage = _damage;
             int score = 0;
 
-            if (health.isCritical)
+            if (_currentHitMode != "ObjectSpawn")
             {
-                damage = (int)(damage * health.damageMultiplier);
-                score = 2;
+                damage = _railGunDamage;
             }
             else
             {
-                score = 1;
+                if (health.isCritical)
+                {
+                    damage = (int)(damage * health.damageMultiplier);
+                    score = 2;
+                }
+                else
+                {
+                    score = 1;
+                }
             }
 
             health.health.TakeDamage(damage);

@@ -1,19 +1,21 @@
 using System;
 using System.Collections.Generic;
+using Services;
 using UnityEditor;
 using UnityEngine;
 
 namespace HealthSystems
 {
-    public class HealthSystem : MonoBehaviour
+    public class HealthSystem : MonoServiceBase
     {
         public event Action<Health> OnCharacterDeath;
     
         [SerializeField] private Health[] _healths;
-
+        
+        public override Type Type { get; } = typeof(HealthSystem);
+        
         protected Dictionary<Collider, HealthArea> _charactersHealth = new();
-    
-    
+        
         // /// <summary>
         // /// Editor only method
         // /// </summary>
@@ -26,8 +28,10 @@ namespace HealthSystems
 #endif
         }
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+            
             _charactersHealth.Clear();
 
             if (_healths == null || _healths.Length == 0)
@@ -77,7 +81,13 @@ namespace HealthSystems
 
         public void CharacterDeathHandler(Health health)
         {
+            Debug.Log("Enemy died");
             RemoveHealthArea(health);
+            InvokeCharacterDeath(health);
+        }
+
+        public void InvokeCharacterDeath(Health health)
+        {
             OnCharacterDeath?.Invoke(health);
         }
         

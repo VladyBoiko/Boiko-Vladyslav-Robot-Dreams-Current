@@ -54,14 +54,14 @@ namespace DamageSystems
         {
             InputController.OnShootingModeChange += ShootingModeChangeHandler;
             InputController.OnShootInput += ShootInputHandler;
-            Bullet.OnStaticHit += HandleBulletHit;
+            // Bullet.OnStaticHit += HandleBulletHit;
         }
 
         private void OnDisable()
         {
             InputController.OnShootingModeChange-= ShootingModeChangeHandler;
             InputController.OnShootInput -= ShootInputHandler;
-            Bullet.OnStaticHit -= HandleBulletHit;
+            // Bullet.OnStaticHit -= HandleBulletHit;
         }
 
         private void ShootingModeChangeHandler(bool performed)
@@ -105,7 +105,7 @@ namespace DamageSystems
         {
             Ray ray = new Ray(_cameraTransform.position, _cameraTransform.forward);
             _hitPoint = _cameraTransform.position + _cameraTransform.forward * _rayDistance;
-            if (Physics.Raycast(ray, out RaycastHit hitInfo, _rayDistance, _rayMask))
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, _rayDistance, _rayMask, QueryTriggerInteraction.Ignore))
             {
                 _hitPoint = hitInfo.point;
                 OnHit?.Invoke("Raycast", hitInfo.point, hitInfo.normal, hitInfo.collider);
@@ -119,7 +119,7 @@ namespace DamageSystems
             Vector3 gunTransformForward = _gunTransform.forward;
             Ray ray = new Ray(gunTransformPosition, gunTransformForward);
             _hitPoint = gunTransformPosition + gunTransformForward * _rayDistance;
-            if (Physics.SphereCast(ray, _shotRadius, out RaycastHit hitInfo, _rayDistance, _rayMask))
+            if (Physics.SphereCast(ray, _shotRadius, out RaycastHit hitInfo, _rayDistance, _rayMask, QueryTriggerInteraction.Ignore))
             {
                 Vector3 directVector = hitInfo.point - gunTransformPosition;
                 Vector3 rayVector = Vector3.Project(directVector, ray.direction);
@@ -145,10 +145,10 @@ namespace DamageSystems
             bullet.Initialize(_projectileSpeed, _projectileLifetime);
         }
 
-        private void HandleBulletHit(string shootingModeName, Collision collision)
-        {
-            OnHit?.Invoke(shootingModeName, collision.contacts[0].point, collision.contacts[0].normal, collision.collider);
-        }
+        // private void HandleBulletHit(string shootingModeName, Collision collision)
+        // {
+        //     OnHit?.Invoke(shootingModeName, collision.contacts[0].point, collision.contacts[0].normal, collision.collider);
+        // }
     
         private IEnumerator ShotRoutine(HitscanShotAspect shot)
         {
