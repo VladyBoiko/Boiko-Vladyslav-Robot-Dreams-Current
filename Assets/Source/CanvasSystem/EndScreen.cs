@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Attributes;
 using Gamemodes;
 using Player;
 using Services;
@@ -28,7 +29,7 @@ namespace CanvasSystem
         
         [SerializeField] private Canvas[] _hudCanvas;
 
-        [SerializeField] private string _lobbySceneName;
+        [SerializeField, SceneDropdown] private string _lobbySceneName;
         
         private PlayerController _playerController;
         private InputController _inputController;

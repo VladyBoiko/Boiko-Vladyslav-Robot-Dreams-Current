@@ -1,4 +1,6 @@
+using Attributes;
 using Player;
+using Services;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,7 +14,7 @@ namespace CanvasSystem
         [SerializeField] private Button _confrimButton;
         [SerializeField] private Button _settingsButton;
         [SerializeField] private Button _cancelButton;
-        [SerializeField] private string _lobbySceneName;
+        [SerializeField, SceneDropdown] private string _lobbySceneName;
         [SerializeField] private InputController _inputController;
 
         public bool Enabled
@@ -41,7 +43,8 @@ namespace CanvasSystem
 
         private void Start()
         {
-            InputController.OnEscapeInput += EscapeHandler;
+            _inputController = ServiceLocator.Instance.GetService<InputController>();
+            _inputController.OnEscapeInput += EscapeHandler;
         }
 
         private void EscapeHandler(bool performed)

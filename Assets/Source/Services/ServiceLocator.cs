@@ -21,7 +21,14 @@ namespace Services
         
         public void AddService(IService service)
         {
-            _services.Add(service.Type, service);
+            Type type = service.Type;
+            if (_services.ContainsKey(type))
+            {
+                Debug.LogWarning($"Service of type {type} already registered! Skipping duplicate.");
+                return;
+            }
+            
+            _services.Add(type, service);
         }
 
         public void AddServiceExplicit(Type type, IService service)

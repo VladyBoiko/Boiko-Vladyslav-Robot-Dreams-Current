@@ -1,3 +1,4 @@
+using Attributes;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,7 +15,7 @@ namespace CanvasSystem
     
         [SerializeField] private Canvas _mainMenuCanvas;
     
-        [SerializeField] private string _gameplaySceneName;
+        [SerializeField, SceneDropdown] private string _gameplaySceneName;
 
         private void Awake()
         {

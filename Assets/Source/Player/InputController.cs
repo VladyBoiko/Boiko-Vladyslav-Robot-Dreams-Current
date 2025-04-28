@@ -1,4 +1,5 @@
 using System;
+using Attributes;
 using Services;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -17,25 +18,29 @@ namespace Player
         public static event Action<bool> OnCameraZoomInput;
         public static event Action<bool> OnShootingModeChange;
         public static event Action<bool> OnScoreInput;
-        public static event Action<bool> OnEscapeInput;
+        public event Action<bool> OnEscapeInput;
         public event Action OnInteract;
+        public event Action OnInventory;
+        public event Action OnCloseInteractable;
 
         [SerializeField] private InputActionAsset _inputActionAsset;
-        [SerializeField] private string _mapName;
-        [SerializeField] private string _UIMapName;
+        [SerializeField, ActionMapDropdown] private string _mapName;
+        [SerializeField, ActionMapDropdown] private string _UIMapName;
     
-        [SerializeField] private string _moveName;
-        [SerializeField] private string _jumpName;
-        [SerializeField] private string _cameraMoveName;
-        [SerializeField] private string _cameraLockName;
-        [SerializeField] private string _cameraChangeName;
-        [SerializeField] private string _explosionName;
-        [SerializeField] private string _shootName;
-        [SerializeField] private string _zoomName;
-        [SerializeField] private string _shootingModeChangeName;
-        [SerializeField] private string _scoreName;
-        [SerializeField] private string _escapeName;
-        [SerializeField] private string _interactName;
+        [SerializeField, ActionInputDropdown] private string _moveName;
+        [SerializeField, ActionInputDropdown] private string _jumpName;
+        [SerializeField, ActionInputDropdown] private string _cameraMoveName;
+        [SerializeField, ActionInputDropdown] private string _cameraLockName;
+        [SerializeField, ActionInputDropdown] private string _cameraChangeName;
+        [SerializeField, ActionInputDropdown] private string _explosionName;
+        [SerializeField, ActionInputDropdown] private string _shootName;
+        [SerializeField, ActionInputDropdown] private string _zoomName;
+        [SerializeField, ActionInputDropdown] private string _shootingModeChangeName;
+        [SerializeField, ActionInputDropdown] private string _scoreName;
+        [SerializeField, ActionInputDropdown] private string _escapeName;
+        [SerializeField, ActionInputDropdown] private string _interactName;
+        [SerializeField, ActionInputDropdown] private string _inventoryName;
+        [SerializeField, ActionInputDropdown] private string _closeInteractableName;
    
         private InputAction _moveAction;
         private InputAction _jumpAction;
@@ -49,6 +54,8 @@ namespace Player
         private InputAction _scoreAction;
         private InputAction _escapeAction;
         private InputAction _interactAction;
+        private InputAction _inventoryAction;
+        private InputAction _closeInteractableAction;
 
         private bool _inputUpdated;
 
@@ -64,36 +71,24 @@ namespace Player
         
             _inputActionAsset.Enable();
         
-            _actionMap = _inputActionAsset?.FindActionMap(_mapName) 
-                         ?? _inputActionAsset?.FindActionMap("Default");
-            _UIActionMap = _inputActionAsset?.FindActionMap(_UIMapName)
-                           ?? _inputActionAsset?.FindActionMap("UI");
+            _actionMap = _inputActionAsset?.FindActionMap(_mapName);
+            _UIActionMap = _inputActionAsset?.FindActionMap(_UIMapName);
         
-            _moveAction = _actionMap?.FindAction(_moveName) 
-                          ?? _actionMap?.FindAction("Move");
-            _jumpAction = _actionMap?.FindAction(_jumpName) 
-                          ?? _actionMap?.FindAction("Jump");
-            _cameraMoveAction = _actionMap?.FindAction(_cameraMoveName) 
-                                ?? _actionMap?.FindAction("CameraMove");
-            _cameraLockAction = _actionMap?.FindAction(_cameraLockName)
-                                ?? _actionMap?.FindAction("CameraLock");
-            _cameraChangeAction = _actionMap?.FindAction(_cameraChangeName)
-                                  ?? _actionMap?.FindAction("CameraChange");
-            _explosionAction = _actionMap?.FindAction(_explosionName)
-                               ?? _actionMap?.FindAction("Explosion");
-            _shootAction = _actionMap?.FindAction(_shootName)
-                           ?? _actionMap?.FindAction("Shoot");
-            _cameraZoomAction = _actionMap?.FindAction(_zoomName)
-                                ?? _actionMap?.FindAction("CameraZoom");
-            _shootingModeChangeAction = _actionMap?.FindAction(_shootingModeChangeName)
-                                        ?? _actionMap?.FindAction("ShootingModeChange");
-            _scoreAction = _actionMap?.FindAction(_scoreName)
-                           ?? _actionMap?.FindAction("ScoreInput");
-            _interactAction = _actionMap?.FindAction(_interactName)
-                              ?? _actionMap?.FindAction("Interact");
-            _escapeAction = _UIActionMap?.FindAction(_escapeName)
-                            ?? _UIActionMap?.FindAction("Escape");
-        
+            _moveAction = _actionMap?.FindAction(_moveName);
+            _jumpAction = _actionMap?.FindAction(_jumpName);
+            _cameraMoveAction = _actionMap?.FindAction(_cameraMoveName);
+            _cameraLockAction = _actionMap?.FindAction(_cameraLockName);
+            _cameraChangeAction = _actionMap?.FindAction(_cameraChangeName);
+            _explosionAction = _actionMap?.FindAction(_explosionName);
+            _shootAction = _actionMap?.FindAction(_shootName);
+            _cameraZoomAction = _actionMap?.FindAction(_zoomName);
+            _shootingModeChangeAction = _actionMap?.FindAction(_shootingModeChangeName);
+            _scoreAction = _actionMap?.FindAction(_scoreName);
+            _interactAction = _actionMap?.FindAction(_interactName);
+            _inventoryAction = _UIActionMap?.FindAction(_inventoryName);
+            _escapeAction = _UIActionMap?.FindAction(_escapeName);
+            _closeInteractableAction = _UIActionMap?.FindAction(_closeInteractableName);
+            
             if (_inputActionAsset)
             {
                 _moveAction.performed += MovePerformedHandler;
@@ -128,6 +123,10 @@ namespace Player
                 _escapeAction.performed += EscapePerformedHandler;
 
                 _interactAction.performed += InteractPerformedHandler;
+
+                _inventoryAction.performed += InventoryPerformedHandler;
+
+                _closeInteractableAction.performed += CloseInteractableHandler;
             }
             else
             {
@@ -142,7 +141,7 @@ namespace Player
             Cursor.lockState = CursorLockMode.None;
         
             _actionMap.Disable();
-            _UIActionMap.Disable();
+            // _UIActionMap.Disable();
         }
 
         protected override void OnDestroy()
@@ -181,6 +180,10 @@ namespace Player
             _escapeAction.performed -= EscapePerformedHandler;
 
             _interactAction.performed -= InteractPerformedHandler;
+            
+            _inventoryAction.performed -= InventoryPerformedHandler;
+
+            _closeInteractableAction.performed -= CloseInteractableHandler;
         
             OnMoveInput = null;
             OnJumpInput = null;
@@ -194,6 +197,8 @@ namespace Player
             OnScoreInput = null;
             OnEscapeInput = null;
             OnInteract = null;
+            OnInventory = null;
+            OnCloseInteractable = null;
         }
         
         
@@ -293,6 +298,16 @@ namespace Player
         private void InteractPerformedHandler(InputAction.CallbackContext context)
         {
             OnInteract?.Invoke();
+        }
+
+        private void InventoryPerformedHandler(InputAction.CallbackContext context)
+        {
+            OnInventory?.Invoke();
+        }
+
+        private void CloseInteractableHandler(InputAction.CallbackContext context)
+        {
+            OnCloseInteractable?.Invoke();
         }
     }
 }
