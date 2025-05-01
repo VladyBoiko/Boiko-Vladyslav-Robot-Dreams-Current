@@ -10,6 +10,8 @@ namespace DamageSystems
         [SerializeField] private LayerMask _rayMask;
     
         private Vector3 _hitPoint;
+        
+        public Vector3 HitPoint => _hitPoint;
     
         private void FixedUpdate()
         {

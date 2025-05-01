@@ -20,7 +20,7 @@ namespace InteractablesSystem
         
         private void Awake()
         {
-            Debug.Log($"Registering interactable {gameObject.name} with collider {collider.name}");
+            // Debug.Log($"Registering interactable {gameObject.name} with collider {collider.name}");
             
             ServiceLocator.Instance.GetService<InteractableService>().AddInteractable(collider, this);
             tooltip.SetCamera(ServiceLocator.Instance.GetService<CameraController>().Camera);

@@ -8,12 +8,16 @@ using HealthSystems;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
+using Attributes;
+using Enemy.Animation;
 using Services;
 
 namespace Enemy
 {
     public class EnemyController : MonoBehaviour
     {
+        public event Action<EnemyBehaviour> onBehaviourChanged;
+        
         [SerializeField] private HealthIndicator _healthIndicator;
         [SerializeField] private EnemyData _data;
         [SerializeField] private NavMeshAgent _navMeshAgent;
@@ -33,8 +37,8 @@ namespace Enemy
         
         [SerializeField] private BillboardBase _billboard;
         
-        /*[SerializeField, /*ReadOnly#1#]*/ private float _patrolStamina;
-        /*[SerializeField, /*ReadOnly#1#]*/ private EnemyBehaviour _currentBehaviour;
+        [SerializeField, ReadOnly] private float _patrolStamina;
+        [SerializeField, ReadOnly] private EnemyBehaviour _currentBehaviour;
         
         protected BehaviourTree _behaviourTree;
         // protected StateMachine _behaviourMachine;
@@ -43,6 +47,8 @@ namespace Enemy
         
         private Dictionary<byte, BehaviourStateBase> _behaviourStates;
         private BehaviourStateBase _currentState;
+        
+        [SerializeField] private EnemyAnimatorController _animatorController; 
         
         public float PatrolStamina
         {
@@ -68,6 +74,8 @@ namespace Enemy
         
         public BillboardBase Billboard => _billboard;
 
+        public EnemyAnimatorController AnimatorController => _animatorController;
+        
         private void Awake()
         {
             _navMeshAgent.updatePosition = false;
@@ -158,11 +166,13 @@ namespace Enemy
 
             if (_currentState == null || _currentState.StateId != newBehaviourId)
             {
-                Debug.Log($"[EnemyController] Switching state from {_currentState?.StateId} to {newBehaviourId}");
+                // Debug.Log($"[EnemyController] Switching state from {_currentState?.StateId} to {newBehaviourId}");
                 _currentState?.Exit();
                 _currentState = _behaviourStates[newBehaviourId];
                 _currentBehaviour = (EnemyBehaviour)newBehaviourId;
                 _currentState.Enter();
+                
+                onBehaviourChanged?.Invoke(_currentBehaviour);
             }
         }
         
@@ -228,26 +238,44 @@ namespace Enemy
             return _playerRadar.SeesTarget;
         }
         
+        // protected void HealthDeathHandler()
+        // {
+        //     _behaviourTree = null;
+        //     
+        //     Debug.Log($"[EnemyController] HealthDeathHandler: {name} died! Alive = {_health.IsAlive}");
+        //     
+        //     if (_behaviourStates.TryGetValue((byte)EnemyBehaviour.Death, out var deathState))
+        //     {
+        //         _currentState?.Exit();
+        //         _currentState = deathState;
+        //         _currentState.Enter();
+        //     }
+        //     
+        //     _health.HealthSystem.InvokeCharacterDeath(_health);
+        //     
+        //     // _health.UnregisterFromSystem();
+        //     //     _behaviourMachine.ForceState((byte)EnemyBehaviour.Death);
+        //     //     ServiceLocator.Instance.GetService<IHealthService>().RemoveCharacter(_health);
+        // }
+        
         protected void HealthDeathHandler()
         {
             _behaviourTree = null;
-            
+    
             Debug.Log($"[EnemyController] HealthDeathHandler: {name} died! Alive = {_health.IsAlive}");
-            
+
+            if (_currentState != null)
+                _currentState.Exit();
+
             if (_behaviourStates.TryGetValue((byte)EnemyBehaviour.Death, out var deathState))
             {
-                Debug.Log("Death");
-                
-                _currentState?.Exit();
                 _currentState = deathState;
+                _currentBehaviour = EnemyBehaviour.Death;
                 _currentState.Enter();
+                onBehaviourChanged?.Invoke(_currentBehaviour);
             }
             
             _health.HealthSystem.InvokeCharacterDeath(_health);
-            
-            // _health.UnregisterFromSystem();
-            //     _behaviourMachine.ForceState((byte)EnemyBehaviour.Death);
-            //     ServiceLocator.Instance.GetService<IHealthService>().RemoveCharacter(_health);
         }
     }
 }

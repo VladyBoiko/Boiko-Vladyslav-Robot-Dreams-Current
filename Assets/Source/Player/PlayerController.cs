@@ -8,6 +8,7 @@ namespace Player
 {
     public class PlayerController : MonoServiceBase
     {
+        
         [SerializeField] private CharacterController _controller;
         [SerializeField] private TargetableBase _targetable;
         [SerializeField] private Health _health;
@@ -22,6 +23,8 @@ namespace Player
 
         private int _currency = 0;
         
+        private InputController _inputController;
+        
         public CharacterController CharacterController => _controller;
         public TargetableBase Targetable => _targetable;
         public Health Health => _health;
@@ -32,7 +35,9 @@ namespace Player
             _healthSystem = ServiceLocator.Instance.GetService<HealthSystem>();
             _healthSystem.OnCharacterDeath += CharacterDeathHandler;
             
-            InputController.OnMoveInput += MoveHandler;
+            _inputController = ServiceLocator.Instance.GetService<InputController>();
+            _inputController.OnMoveInput += MoveHandler;
+            
             _transform = transform;
             if (_controller) return;
                 Debug.LogError("No CharacterController attached");

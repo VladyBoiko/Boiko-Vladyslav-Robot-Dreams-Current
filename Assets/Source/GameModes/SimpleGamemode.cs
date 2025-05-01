@@ -75,7 +75,7 @@ namespace Gamemodes
                     RemoveHealthArea(_playerController.Health);
                 
                 OnComplete?.Invoke(true);
-                Debug.Log("Game Over");
+                // Debug.Log("Game Over");
                 return;
             }
         }

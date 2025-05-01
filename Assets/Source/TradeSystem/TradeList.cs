@@ -68,7 +68,7 @@ namespace TradeSystem
 
             foreach (ItemEntry entry in sortedEntries)
             {
-                Debug.Log(entry.Item.Name);
+                // Debug.Log(entry.Item.Name);
             }
             
             for (int i = 0; i < sortedEntries.Count; ++i)
@@ -131,12 +131,12 @@ namespace TradeSystem
                 if (shiftClick)
                 {
                     totalAmount *= 10;
-                    Debug.Log(totalAmount);
+                    // Debug.Log(totalAmount);
                 }
                 
                 if (_playerController.Currency >= entry.price * totalAmount)
                 {
-                    Debug.Log($"{_playerController.Currency} - {entry.price * totalAmount}");
+                    // Debug.Log($"{_playerController.Currency} - {entry.price * totalAmount}");
                     _playerController.RemoveCurrency(entry.price * totalAmount);
                     
                     _ = _merchantInventory.Remove(entry.productId, entry.productAmount * totalAmount);

@@ -45,7 +45,7 @@ namespace DamageSystems
                 {
                     damage = (int)(damage * health.damageMultiplier);
                     score = 2;
-                    Debug.Log($"Critical Damage: {hitCollider}!");
+                    // Debug.Log($"Critical Damage: {hitCollider}!");
                 }
                 else
                 {
@@ -56,7 +56,7 @@ namespace DamageSystems
                 var popup = Instantiate(_damagePopupPrefab, hitPoint, Quaternion.identity);
                 popup.Initialize(damage, _camera);
             
-                Debug.Log($"{shootingModeName} hit: {hitCollider.name} at {hitPoint}.");
+                // Debug.Log($"{shootingModeName} hit: {hitCollider.name} at {hitPoint}.");
                 // OnHit?.Invoke(health.health ? 1 : 0, score);
                 OnHit?.Invoke(1, score);
             }

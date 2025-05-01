@@ -89,7 +89,7 @@ namespace HealthSystems
             if (!IsAlive || damage <= 0) return;
 
             HealthValue = Mathf.Clamp(HealthValue - damage, 0, _maxHealth);
-            Debug.Log($"Health: {HealthValue}, Damage: {damage}.");
+            // Debug.Log($"Health: {HealthValue}, Damage: {damage}.");
             if (HealthValue <= 0)
                 IsAlive = false;
         

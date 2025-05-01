@@ -81,7 +81,7 @@ namespace HealthSystems
 
         public void CharacterDeathHandler(Health health)
         {
-            Debug.Log("Enemy died");
+            // Debug.Log("Enemy died");
             RemoveHealthArea(health);
             InvokeCharacterDeath(health);
         }

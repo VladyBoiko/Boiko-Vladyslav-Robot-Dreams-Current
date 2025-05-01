@@ -58,7 +58,7 @@ namespace CanvasSystem
             
             if (_playerController != null)
             {
-                Debug.Log(_playerController);
+                // Debug.Log(_playerController);
                 _playerController.enabled = false;
                 _inputController.enabled = false;
             }

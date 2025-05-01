@@ -6,6 +6,9 @@ namespace Enemy.BehaviourTreeSystem.EnemyBehaviour
 {
     public class MeleeAttackBehaviour : BehaviourStateBase
     {
+        public event Action OnMeleeAttackStarted;
+        public event Action OnMeleeAttackEndedToIdle;
+        public event Action OnMeleeAttackEndedToMovement;
         public event Action<string, Vector3, Vector3, Collider> OnMeleeAttackHit;
         
         private readonly NavMeshAgent _agent;
@@ -13,7 +16,7 @@ namespace Enemy.BehaviourTreeSystem.EnemyBehaviour
         private readonly Transform _characterTransform;
         private readonly Transform _weaponTransform;
         
-        private readonly float _attackCooldown = 1.5f;
+        private readonly float _attackCooldown = 0.5f;
         private float _cooldownTimer;
 
         private const float MeleeRange = 1.5f;
@@ -48,7 +51,9 @@ namespace Enemy.BehaviourTreeSystem.EnemyBehaviour
             _isAttacking = false;
             _agent.isStopped = false;
             
-            Debug.Log("[MeleeAttack] Entered Melee Attack Behaviour");
+            enemyController.AnimatorController.TriggerMovement();
+            
+            // Debug.Log("[MeleeAttack] Entered Melee Attack Behaviour");
         }
 
         public override void Update(float deltaTime)
@@ -65,7 +70,7 @@ namespace Enemy.BehaviourTreeSystem.EnemyBehaviour
             {
                 _attackAnimationTimer -= deltaTime;
 
-                AttackAnimation();
+                // AttackAnimation();
                 
                 if (_attackAnimationTimer <= 0f)
                 {
@@ -122,6 +127,10 @@ namespace Enemy.BehaviourTreeSystem.EnemyBehaviour
             _isAttacking = true;
             _attackAnimationTimer = DamageDelay;
             
+            enemyController.AnimatorController.TriggerMeleeAttack();
+            
+            // OnMeleeAttackStarted?.Invoke();
+            
             // Debug.Log("[MeleeAttack] Started attack");
         }
 
@@ -158,6 +167,10 @@ namespace Enemy.BehaviourTreeSystem.EnemyBehaviour
             _isAttacking = false;
             _attackAnimationTimer = 0f;
             
+            enemyController.AnimatorController.TriggerMovement();
+            
+            // OnMeleeAttackEndedToMovement?.Invoke();
+            
             _weaponTransform.localPosition = _weaponInitialPosition;
             _weaponTransform.localRotation = _weaponInitialRotation;
         }
@@ -165,11 +178,17 @@ namespace Enemy.BehaviourTreeSystem.EnemyBehaviour
         public override void Exit()
         {
             base.Exit();
-            _agent.ResetPath();
-             _weaponTransform.localPosition = _weaponInitialPosition;
-             _weaponTransform.localRotation = _weaponInitialRotation;
             
-            Debug.Log("[MeleeAttack] Exited Melee Attack Behaviour");
+            enemyController.AnimatorController.TriggerIdle();
+            
+            // OnMeleeAttackEndedToIdle?.Invoke();
+            
+            _agent.ResetPath();
+            
+            _weaponTransform.localPosition = _weaponInitialPosition;
+            _weaponTransform.localRotation = _weaponInitialRotation;
+            
+            // Debug.Log("[MeleeAttack] Exited Melee Attack Behaviour");
         }
     }
 }

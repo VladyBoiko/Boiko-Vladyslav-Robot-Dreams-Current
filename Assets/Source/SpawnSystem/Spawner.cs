@@ -67,7 +67,7 @@ namespace SpawnSystem
 
         private void SpawnEnemies(int count)
         {
-            Debug.Log("Enemy spawned");
+            // Debug.Log("Enemy spawned");
             
             for (int i = 0; i < count; ++i)
                 SpawnEnemy();

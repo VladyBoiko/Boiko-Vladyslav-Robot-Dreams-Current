@@ -39,11 +39,11 @@ namespace Enemy
         {
             _playerColliders.AddRange(_playerController.GetComponentsInChildren<Collider>());
             
-            Debug.Log($"Found {_playerColliders.Count} colliders for {gameObject.name}:");
-            foreach (Collider collider in _playerColliders)
-            {
-                Debug.Log(collider.gameObject.name);
-            }
+            // Debug.Log($"Found {_playerColliders.Count} colliders for {gameObject.name}:");
+            // foreach (Collider collider in _playerColliders)
+            // {
+            //     Debug.Log(collider.gameObject.name);
+            // }
         }
         
         public State CurrentState
@@ -168,7 +168,7 @@ namespace Enemy
             }
             if (targetable.TargetPivot == null)
             {
-                Debug.Log("TargetPivot is null");
+                // Debug.Log("TargetPivot is null");
                 return false;
             }
             
@@ -192,7 +192,7 @@ namespace Enemy
             if (!Physics.Raycast(position, (playerPosition - position).normalized, out RaycastHit hit, 
                     _range, _rayMask, QueryTriggerInteraction.Ignore))
             {
-                Debug.Log("Raycast hit nothing");
+                // Debug.Log("Raycast hit nothing");
                 return false;
             }
 

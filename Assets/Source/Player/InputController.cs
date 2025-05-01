@@ -8,8 +8,8 @@ namespace Player
 {
     public class InputController : MonoServiceBase
     {
-        public static event Action<Vector2> OnMoveInput;
-        public static event Action<bool> OnJumpInput;
+        public event Action<Vector2> OnMoveInput;
+        public event Action<bool> OnJumpInput;
         public static event Action<Vector2> OnCameraMoveInput;
         public static event Action<bool> OnCameraLockInput;
         public static event Action<bool> OnCameraChangeInput;
@@ -201,6 +201,15 @@ namespace Player
             OnCloseInteractable = null;
         }
         
+        public void Lock()
+        {
+            _actionMap.Disable();
+        }
+
+        public void Unlock()
+        {
+            _actionMap.Enable();
+        }
         
         private void MovePerformedHandler(InputAction.CallbackContext context)
         {

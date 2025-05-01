@@ -1,9 +1,13 @@
+using System;
+using Services;
 using UnityEngine;
 
 namespace Player
 {
-    public class PlayerJumper : MonoBehaviour
+    public class PlayerJumper : MonoServiceBase
     {
+        public event Action OnJumpEnded;
+        
         [SerializeField] private CharacterController _controller;
 
         [SerializeField] private float _jumpHeight = 2f;
@@ -14,10 +18,16 @@ namespace Player
     
         private Vector3 _velocity;
         private bool _isGrounded;
-    
+        
+        private InputController _inputController;
+
+        public override Type Type { get; } = typeof(PlayerJumper);
+
         // public event Action<bool> OnGroundedStatusChanged;
         private void Start()
         {
+            _inputController = ServiceLocator.Instance.GetService<InputController>();
+            
             if (_controller == null)
             {
                 Debug.LogError("No CharacterController attached!");
@@ -32,14 +42,19 @@ namespace Player
                 return;
             }
         
-            InputController.OnJumpInput += JumpHandler;
+            _inputController.OnJumpInput += JumpHandler;
         }
 
         private void Update()
         {
-            // bool wasGrounded = _isGrounded;
+            bool wasGrounded = _isGrounded;
             _isGrounded = Physics.CheckSphere(_groundCheck.position, _groundCheckRadius, _groundLayer);
-        
+            
+            if (!wasGrounded && _isGrounded)
+            {
+                OnJumpEnded?.Invoke();
+            }
+            
             // if (wasGrounded != _isGrounded)
             // {
             //     OnGroundedStatusChanged?.Invoke(_isGrounded);

@@ -16,6 +16,7 @@ namespace Enemy.BehaviourTreeSystem.EnemyBehaviour
         {
             _meleeAttack = new MeleeAttackBehaviour(stateId, enemyController);
             enemyController.DamageDealer.SetMeleeAttackBehaviour(_meleeAttack);
+            // enemyController.AnimatorController.SetMeleeAttackBehaviour(_meleeAttack);
             _shootAttack = new ShootBehaviour(stateId, enemyController);
         }
 

@@ -62,7 +62,7 @@ namespace DamageSystems
             
             if (_healthSystem.GetHealth(collider, out HealthArea health))
             {
-                Debug.Log($"Collision with: {collider.gameObject.name}");
+                // Debug.Log($"Collision with: {collider.gameObject.name}");
                 
                 _currentHitMode = mode;
                 HandleDamage(health, point, collider);

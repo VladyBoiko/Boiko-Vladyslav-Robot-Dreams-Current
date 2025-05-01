@@ -54,7 +54,7 @@ namespace Enemy.BehaviourTreeSystem.EnemyBehaviour
 
             if (ArrivedAtDestination())
             {
-                Debug.Log("Arrived");
+                // Debug.Log("Arrived");
                 enemyController.PatrolStamina = 0f;
                 enemyController.ComputeBehaviour();
             }

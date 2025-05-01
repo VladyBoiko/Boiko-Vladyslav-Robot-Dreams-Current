@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Player;
 using Services;
@@ -7,6 +8,8 @@ namespace InteractablesSystem
 {
     public class Interactor : MonoBehaviour
     {
+        public event Action<IInteractable> OnInteract;
+        
         [SerializeField] private Transform _transform;
         
         private IInteractable _currentInteractable;
@@ -27,7 +30,7 @@ namespace InteractablesSystem
         {
             if (_interactableService.CanInteract(other, out IInteractable interactable))
             {
-                Debug.Log(other.name);
+                Debug.Log($"Trigger entered: {other.name}");
                 _interactables.Add(interactable);
                 if (_currentInteractable == null)
                 {
@@ -55,7 +58,6 @@ namespace InteractablesSystem
 
         private void OnTriggerExit(Collider other)
         {
-            Debug.Log($"Trigger entered: {other.name}");
             if (_interactableService.CanInteract(other, out IInteractable interactable))
             {
                 _interactables.Remove(interactable);
@@ -91,6 +93,7 @@ namespace InteractablesSystem
             {
                 _currentInteractable.onDestroy += InteractableDestroyHandler;
                 _currentInteractable.Interact();
+                OnInteract?.Invoke(_currentInteractable);
             }
         }
 
