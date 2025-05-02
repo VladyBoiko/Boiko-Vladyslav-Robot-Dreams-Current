@@ -350,6 +350,7 @@ GameObject:
   - component: {fileID: 4615762673025296061}
   - component: {fileID: 3979446699808451812}
   - component: {fileID: 7807296984741659044}
+  - component: {fileID: 2311809648739993255}
   m_Layer: 0
   m_Name: Blaster
   m_TagString: Untagged
@@ -407,6 +408,28 @@ MonoBehaviour:
   _damage: 20
   _railGunDamage: 0
   _healthSystem: {fileID: 0}
+--- !u!114 &2311809648739993255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3772754297646195904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99440e5204325844283ffb418ceea6c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _shooter: {fileID: 3979446699808451812}
+  _muzzleFlashPrefab: {fileID: 5262475808528217681, guid: 25e3c5f03f254174196eed00e15d07d9,
+    type: 3}
+  _muzzleFlashPoint: {fileID: 4961873287947254532}
+  _hitEffectPrefab: {fileID: 1508090405554295831, guid: c26c77ff494631d4abaac7d2c99435db,
+    type: 3}
+  _decalLifetime: 30
+  _woodMaterial: {fileID: 2100000, guid: 2ce51e852f9115c4d82c408105132566, type: 2}
+  _bodyMaterial: {fileID: 2100000, guid: 26492b0adb473dc45a40a227a83aa55e, type: 2}
+  _defaultMaterial: {fileID: 2100000, guid: aadda35786de9f94e92d7dc1d3157a38, type: 2}
 --- !u!1 &4047407507350487036
 GameObject:
   m_ObjectHideFlags: 0
@@ -899,7 +922,7 @@ Transform:
   m_GameObject: {fileID: 8573796606956357676}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.07, z: 0.315}
+  m_LocalPosition: {x: 0, y: 0.08, z: 0.315}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1271,6 +1294,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3655377998865309964}
+    - targetCorrespondingSourceObject: {fileID: 1782702501690864755, guid: 60770bdb4dc667c45bea53db0339dc05,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1044565174153556118}
   m_SourcePrefab: {fileID: 100100000, guid: 60770bdb4dc667c45bea53db0339dc05, type: 3}
 --- !u!1 &5831944853874491408 stripped
 GameObject:
@@ -1300,6 +1327,18 @@ MonoBehaviour:
   _meleeAttackName: MeleeAttack
   _horizontalName: Horizontal
   _verticalName: Vertical
+--- !u!114 &1044565174153556118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5831944853874491408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d735f66699714e689bc3556a565c164b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &6603660645469199018 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1438546959266459337, guid: 60770bdb4dc667c45bea53db0339dc05,

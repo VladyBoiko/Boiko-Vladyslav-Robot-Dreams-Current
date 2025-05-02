@@ -15,7 +15,8 @@ namespace DamageSystems
         [Header("Muzzle Flash Settings")]
         [SerializeField] private GameObject _muzzleFlashPrefab;
         [SerializeField] private Transform _muzzleFlashPoint;
-        [SerializeField] private float _muzzleFlashDuration = 0.1f;
+        // [SerializeField] private float _muzzleFlashDuration = 0.1f;
+        // [SerializeField] private ParticleSystem _muzzleFlash;
 
         [Header("Hit Effect Settings")]
         [SerializeField] private DecalProjector _hitEffectPrefab;
@@ -38,11 +39,29 @@ namespace DamageSystems
 
         private void HandleShot()
         {
+            Debug.Log("Shot called");
+            
             if (!_muzzleFlashPrefab || !_muzzleFlashPoint) return;
-            GameObject muzzleFlash = Instantiate(_muzzleFlashPrefab, _muzzleFlashPoint.position, _muzzleFlashPoint.rotation, _muzzleFlashPoint);
-            StartCoroutine(Flash(muzzleFlash, _muzzleFlashDuration));
+            
+            Instantiate(_muzzleFlashPrefab, _muzzleFlashPoint.position, 
+                     _muzzleFlashPoint.rotation);
+            
+            // GameObject muzzleFlash = 
+            //     Instantiate(_muzzleFlashPrefab, _muzzleFlashPoint.position, 
+            //         _muzzleFlashPoint.rotation, _muzzleFlashPoint);
+            
+            // Destroy(muzzleFlash, 0.3f);
+            
+            // StartCoroutine(Flash(muzzleFlash, _muzzleFlashDuration));
+            
+            // _muzzleFlash.Play();
         }
-    
+
+        private void OnParticleSystemStopped()
+        {
+            Debug.Log("Particle System Stopped");
+        }
+
         private void HandleHit(string shootingMode, Vector3 hitPoint, Vector3 hitNormal, Collider hitCollider)
         {
             string hitLayerName = LayerMask.LayerToName(hitCollider.gameObject.layer);
