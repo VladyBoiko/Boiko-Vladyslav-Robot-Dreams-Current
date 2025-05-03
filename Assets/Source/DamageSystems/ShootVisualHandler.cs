@@ -28,18 +28,18 @@ namespace DamageSystems
         private void OnEnable()
         {
             _shooter.OnShot += HandleShot;
-            _shooter.OnHit += HandleHit;
+            // _shooter.OnHit += HandleHit;
         }
 
         private void OnDisable()
         {
             _shooter.OnShot -= HandleShot;
-            _shooter.OnHit -= HandleHit;
+            // _shooter.OnHit -= HandleHit;
         }
 
         private void HandleShot()
         {
-            Debug.Log("Shot called");
+            // Debug.Log("Shot called");
             
             if (!_muzzleFlashPrefab || !_muzzleFlashPoint) return;
             

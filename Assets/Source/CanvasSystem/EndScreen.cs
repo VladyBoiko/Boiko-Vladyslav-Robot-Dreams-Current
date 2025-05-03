@@ -27,7 +27,7 @@ namespace CanvasSystem
         [SerializeField] private float _fadeDuration = 1f;
         [SerializeField] private float _scaleDuration = 0.5f;
         
-        [SerializeField] private Canvas[] _hudCanvas;
+        // [SerializeField] private Canvas[] _hudCanvas;
 
         [SerializeField, SceneDropdown] private string _lobbySceneName;
         
@@ -53,16 +53,28 @@ namespace CanvasSystem
 
         private void ModeCompletedHandler(bool success)
         {
-            for(int i = 0; i < _hudCanvas.Length; i++)
-                _hudCanvas[i].enabled = false;
-            
+            // for(int i = 0; i < _hudCanvas.Length; i++)
+            //     _hudCanvas[i].enabled = false;
+
+            for (var i = 0; i < ClosableCanvasRegistry.Registered.Count; i++)
+            {
+                var canvas = ClosableCanvasRegistry.Registered[i];
+                canvas.enabled = false;
+            }
+
             if (_playerController != null)
             {
                 // Debug.Log(_playerController);
                 _playerController.enabled = false;
-                _inputController.enabled = false;
             }
-            
+
+            if (_inputController != null)
+            {
+                _inputController.FullLock();
+
+                _inputController.CursorEnable();
+            }
+
             if (success)
                 Show(_winScreen);
             else

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace InventorySystem
 {
-    public class InventoryService : GlobalMonoServiceBase
+    public class InventoryService : MonoServiceBase/*GlobalMonoServiceBase*/ 
     {
         [Serializable]
         public struct ItemData
@@ -24,30 +24,31 @@ namespace InventorySystem
         
         private Inventory _inventory;
         private PlayerController _playerController;
+        private InputController _inputController;
 
-        private bool _inventoryOpened;
-
-        private bool InventoryOpened
-        {
-            get => _inventoryOpened;
-            set
-            {
-                _inventoryOpened = value;
-
-                if (_inventoryOpened)
-                {
-                    _inventoryView.Show();
-                }
-                else
-                {
-                    _inventoryView.Hide();
-                }
-                
-                InputController inputController = ServiceLocator.Instance.GetService<InputController>();
-                if (inputController != null)
-                    inputController.enabled = !_inventoryOpened;
-            }
-        }
+        // private bool _inventoryOpened;
+        //
+        // private bool InventoryOpened
+        // {
+        //     get => _inventoryOpened;
+        //     set
+        //     {
+        //         _inventoryOpened = value;
+        //         
+        //         if (_inventoryOpened)
+        //         {
+        //             _inventoryView.Show();
+        //         }
+        //         else
+        //         {
+        //             _inventoryView.Hide();
+        //         }
+        //         
+        //         // InputController inputController = ServiceLocator.Instance.GetService<InputController>();
+        //         if (_inputController != null)
+        //             _inputController.enabled = !_inventoryOpened;
+        //     }
+        // }
         
         public override Type Type { get; } = typeof(InventoryService);
         
@@ -72,22 +73,37 @@ namespace InventorySystem
             _playerController = ServiceLocator.Instance.GetService<PlayerController>();
             _playerController.SetCurrency(_startingCurrency);
             
+            _inputController = ServiceLocator.Instance.GetService<InputController>();
+            
             HideInventory();
         }
         
-        // public void ShowInventory()
-        // {
-        //     InventoryOpened = true;
-        // }
+        public void ShowInventory()
+        {
+            _inventoryView.Show();
+            _inputController.OpenMenu();
+            _inputController.OnCloseInventory += CloseInventoryHandler;
+        }
 
         public void HideInventory()
         {
-            InventoryOpened = false;
+            // InventoryOpened = false;
+            
+            _inventoryView.Hide();
+            _inputController.OnCloseInventory -= CloseInventoryHandler;
+            _inputController.CloseMenu();
         }
 
-        public void ToggleInventory()
+        // public void ToggleInventory()
+        // {
+        //     InventoryOpened = !InventoryOpened;
+        // }
+
+        private void CloseInventoryHandler()
         {
-            InventoryOpened = !InventoryOpened;
+            Debug.Log("Inventory Closed");
+
+            HideInventory();
         }
     }
 }

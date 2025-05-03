@@ -19,7 +19,8 @@ namespace InventorySystem
 
         private void InventoryHandler()
         {
-            _inventoryService.ToggleInventory();
+            // _inventoryService.ToggleInventory();
+            _inventoryService.ShowInventory();
         }
     }
 }

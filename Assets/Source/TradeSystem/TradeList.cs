@@ -142,6 +142,7 @@ namespace TradeSystem
                     _ = _merchantInventory.Remove(entry.productId, entry.productAmount * totalAmount);
                     _buyerInventory.Add(entry.productId, entry.productAmount * totalAmount);
                     OnInventriesUpdate?.Invoke();
+                    UpdateList();
                     Debug.Log($"Payment processed");
                 }
                 else
@@ -166,6 +167,7 @@ namespace TradeSystem
                     _ = _merchantInventory.Remove(entry.productId, entry.productAmount * totalAmount);
                     _buyerInventory.Add(entry.productId, entry.productAmount * totalAmount);
                     OnInventriesUpdate?.Invoke();
+                    UpdateList();
                     Debug.Log($"Item sold for {entry.price} currency");
                 }
                 else

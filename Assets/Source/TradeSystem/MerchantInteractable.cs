@@ -45,37 +45,42 @@ namespace TradeSystem
             if (_active)
             {
                 _merchantUI.Show();
-                _inputController.enabled = false;
-                _inputController.OnCloseInteractable += CloseInteractableHandler;
+                _inputController.OnCloseInteractMenu += CloseInteractMenu;
+                // _inputController.MenuLock();
+                _inputController.OpenMenu();
             }
             else
             {
-                CloseInteractableHandler();
+                CloseInteractMenu();
             }
             tooltip.gameObject.SetActive(!_active);
         }
 
-        public override void Highlight(bool active)
-        {
-            if (active)
-            {
-                base.Highlight(active);
-            }
-            else
-            {
-                _active = false;
-                _merchantUI.Hide();
-                tooltip.gameObject.SetActive(false);
-            }
-        }
+        // public override void Highlight(bool active)
+        // {
+        //     if (active)
+        //     {
+        //         base.Highlight(active);
+        //     }
+        //     else
+        //     {
+        //         _active = false;
+        //         _merchantUI.Hide();
+        //         tooltip.gameObject.SetActive(false);
+        //     }
+        // }
 
-        private void CloseInteractableHandler()
+        private void CloseInteractMenu()
         {
+            Debug.Log("CloseInteractMenu");
+            
             _active = false;
-            _inputController.OnCloseInteractable -= CloseInteractableHandler;
+            _inputController.OnCloseInteractMenu -= CloseInteractMenu;
             _merchantUI.Hide();
             Highlight(true);
-            _inputController.enabled = true;
+            // _inputController.MenuUnlock();
+            // _inputController.Unlock();
+            _inputController.CloseMenu();
         }
     }
 }

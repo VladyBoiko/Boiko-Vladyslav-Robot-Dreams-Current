@@ -13,10 +13,12 @@ namespace InteractablesSystem
         [SerializeField] protected GameObject rootObject;
         [SerializeField] protected Collider collider;
         [SerializeField] protected BillboardBase tooltip;
+        [SerializeField] private InteractableType _type  = InteractableType.Undefined;
 
         private Transform _transform;
         
         public Vector3 Position => _transform.position;
+        public InteractableType Type => _type;
         
         private void Awake()
         {

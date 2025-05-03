@@ -57,6 +57,8 @@ namespace Player.Animation
         private List<AnimationCondition> _conditions;
         private PlayerAnimState _currentState = PlayerAnimState.Idle;
         
+        private IInteractable _interactable;
+        
         private class AnimationCondition
         {
             public Func<bool> Condition;
@@ -142,6 +144,8 @@ namespace Player.Animation
         
         private void InteractHandler(IInteractable iInteractable)
         {
+            _interactable = iInteractable;
+            
             _handsIK.DisableIK();
             _isInteracting = true;
             _inputController.Lock();
@@ -151,7 +155,8 @@ namespace Player.Animation
         {
             _handsIK.EnableIK();
             _isInteracting = false;
-            _inputController.Unlock();
+            if(_interactable.Type != InteractableType.Menu)
+                _inputController.Unlock();
         }
 
         public void CharacterRevived()

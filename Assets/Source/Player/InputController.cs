@@ -21,11 +21,13 @@ namespace Player
         public event Action<bool> OnEscapeInput;
         public event Action OnInteract;
         public event Action OnInventory;
-        public event Action OnCloseInteractable;
+        public event Action OnCloseInventory;
+        public event Action OnCloseInteractMenu;
 
         [SerializeField] private InputActionAsset _inputActionAsset;
         [SerializeField, ActionMapDropdown] private string _mapName;
         [SerializeField, ActionMapDropdown] private string _UIMapName;
+        [SerializeField, ActionMapDropdown] private string _menuMapName;
     
         [SerializeField, ActionInputDropdown] private string _moveName;
         [SerializeField, ActionInputDropdown] private string _jumpName;
@@ -40,7 +42,8 @@ namespace Player
         [SerializeField, ActionInputDropdown] private string _escapeName;
         [SerializeField, ActionInputDropdown] private string _interactName;
         [SerializeField, ActionInputDropdown] private string _inventoryName;
-        [SerializeField, ActionInputDropdown] private string _closeInteractableName;
+        [SerializeField, ActionInputDropdown] private string _closeInventoryName;
+        [SerializeField, ActionInputDropdown] private string _closeInteractMenuName;
    
         private InputAction _moveAction;
         private InputAction _jumpAction;
@@ -55,24 +58,26 @@ namespace Player
         private InputAction _escapeAction;
         private InputAction _interactAction;
         private InputAction _inventoryAction;
-        private InputAction _closeInteractableAction;
+        private InputAction _closeInventoryAction;
+        private InputAction _closeInteractMenuAction;
 
         private bool _inputUpdated;
 
         private InputActionMap _actionMap;
         private InputActionMap _UIActionMap;
+        private InputActionMap _menuActionMap;
 
         public override Type Type { get; } = typeof(InputController);
         
         private void OnEnable()
         {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            CursorDisable();
         
             _inputActionAsset.Enable();
         
             _actionMap = _inputActionAsset?.FindActionMap(_mapName);
             _UIActionMap = _inputActionAsset?.FindActionMap(_UIMapName);
+            _menuActionMap = _inputActionAsset?.FindActionMap(_menuMapName);
         
             _moveAction = _actionMap?.FindAction(_moveName);
             _jumpAction = _actionMap?.FindAction(_jumpName);
@@ -85,9 +90,13 @@ namespace Player
             _shootingModeChangeAction = _actionMap?.FindAction(_shootingModeChangeName);
             _scoreAction = _actionMap?.FindAction(_scoreName);
             _interactAction = _actionMap?.FindAction(_interactName);
-            _inventoryAction = _UIActionMap?.FindAction(_inventoryName);
-            _escapeAction = _UIActionMap?.FindAction(_escapeName);
-            _closeInteractableAction = _UIActionMap?.FindAction(_closeInteractableName);
+            _inventoryAction = _actionMap?.FindAction(_inventoryName);
+            
+            _closeInventoryAction = _UIActionMap?.FindAction(_closeInventoryName);
+            _closeInteractMenuAction = _UIActionMap?.FindAction(_closeInteractMenuName);
+            
+            _escapeAction = _menuActionMap?.FindAction(_escapeName);
+            
             
             if (_inputActionAsset)
             {
@@ -126,22 +135,25 @@ namespace Player
 
                 _inventoryAction.performed += InventoryPerformedHandler;
 
-                _closeInteractableAction.performed += CloseInteractableHandler;
+                _closeInventoryAction.performed += CloseInventoryPerformedHandler;
+                
+                _closeInteractMenuAction.performed += CloseInteractMenuPerformedHandler;
             }
             else
             {
                 Debug.LogError("Input action asset is missing.");
             }
+            _UIActionMap.Disable();
         }
     
 
         private void OnDisable()
         {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
+            CursorEnable();
         
             _actionMap.Disable();
             // _UIActionMap.Disable();
+            // _menuActionMap.Disable();
         }
 
         protected override void OnDestroy()
@@ -183,7 +195,8 @@ namespace Player
             
             _inventoryAction.performed -= InventoryPerformedHandler;
 
-            _closeInteractableAction.performed -= CloseInteractableHandler;
+            _closeInventoryAction.performed -= CloseInventoryPerformedHandler;
+            _closeInteractMenuAction.performed -= CloseInteractMenuPerformedHandler;
         
             OnMoveInput = null;
             OnJumpInput = null;
@@ -198,7 +211,20 @@ namespace Player
             OnEscapeInput = null;
             OnInteract = null;
             OnInventory = null;
-            OnCloseInteractable = null;
+            OnCloseInteractMenu = null;
+            OnCloseInventory = null;
+        }
+
+        public void CursorEnable()
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+
+        public void CursorDisable()
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
         }
         
         public void Lock()
@@ -206,9 +232,56 @@ namespace Player
             _actionMap.Disable();
         }
 
+        public void UILock()
+        {
+            _UIActionMap.Disable();
+        }
+
+        public void MenuLock()
+        {
+            CursorEnable();
+            
+            _menuActionMap.Disable();
+
+            UIUnLock();
+        }     
+        
         public void Unlock()
         {
             _actionMap.Enable();
+        }
+        
+        public void UIUnLock()
+        {
+            _UIActionMap.Enable();
+        }
+
+        public void MenuUnlock()
+        {
+            CursorDisable();
+            
+            _menuActionMap.Enable();
+            
+            UILock();
+        }
+
+        public void FullLock()
+        {
+            _actionMap.Disable();
+            _menuActionMap.Disable();
+            _UIActionMap.Disable();
+        }
+
+        public void OpenMenu()
+        {
+            MenuLock();
+            Lock();
+        }
+        
+        public void CloseMenu()
+        {
+            MenuUnlock();
+            Unlock();
         }
         
         private void MovePerformedHandler(InputAction.CallbackContext context)
@@ -314,9 +387,14 @@ namespace Player
             OnInventory?.Invoke();
         }
 
-        private void CloseInteractableHandler(InputAction.CallbackContext context)
+        private void CloseInventoryPerformedHandler(InputAction.CallbackContext context)
         {
-            OnCloseInteractable?.Invoke();
+            OnCloseInventory?.Invoke();
+        }
+
+        private void CloseInteractMenuPerformedHandler(InputAction.CallbackContext context)
+        {
+            OnCloseInteractMenu?.Invoke();
         }
     }
 }

@@ -55,7 +55,6 @@ namespace Player
 
         private void CharacterDeathHandler(Health health)
         {
-            Debug.Log("Character Death");
             _currency += 10;
         }
         

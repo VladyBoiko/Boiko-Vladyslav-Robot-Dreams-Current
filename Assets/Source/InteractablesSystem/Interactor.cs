@@ -19,6 +19,8 @@ namespace InteractablesSystem
 
         private readonly HashSet<IInteractable> _interactables = new();
         
+        // private bool _isInteracting;
+        
         private void Awake()
         {
             _inputController = ServiceLocator.Instance.GetService<InputController>();
@@ -58,6 +60,12 @@ namespace InteractablesSystem
 
         private void OnTriggerExit(Collider other)
         {
+            // if (_isInteracting)
+            // {
+            //     _inputController.MenuUnlock();
+            //     _isInteracting = false;
+            // }
+
             if (_interactableService.CanInteract(other, out IInteractable interactable))
             {
                 _interactables.Remove(interactable);
@@ -89,10 +97,12 @@ namespace InteractablesSystem
 
         private void InteractHandler()
         {
-            if (_currentInteractable != null)
+            if (_currentInteractable != null /*&& !_isInteracting*/)
             {
+                // _isInteracting = true;
                 _currentInteractable.onDestroy += InteractableDestroyHandler;
                 _currentInteractable.Interact();
+                
                 OnInteract?.Invoke(_currentInteractable);
             }
         }
