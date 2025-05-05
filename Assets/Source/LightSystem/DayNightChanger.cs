@@ -33,7 +33,7 @@ namespace LightSystem
                 if (_isDay == value)
                     return;
                 _isDay = value;
-                Debug.Log(_isDay? "Day" : "Night");
+                // Debug.Log(_isDay? "Day" : "Night");
             
                 _sunLight.enabled = _isDay;
                 _moonLight.enabled = !_isDay;

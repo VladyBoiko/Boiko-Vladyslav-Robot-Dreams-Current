@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Player;
 using UnityEngine;
@@ -6,6 +7,8 @@ namespace DamageSystems
 {
     public class ExplosionController : MonoBehaviour
     {
+        public event Action<Vector3> OnExplode;
+        
         [SerializeField] private Transform _cameraTransform;
         [SerializeField] private float _rayDistance;
         [SerializeField] private LayerMask _rayMask;
@@ -43,6 +46,7 @@ namespace DamageSystems
                     GameObject explosionEffect = Instantiate(_explosionVisualization, _hitPoint, Quaternion.identity);
                     explosionEffect.transform.localScale = Vector3.one * _explosionRadius;
                     Destroy(explosionEffect, 1.0f);
+                    OnExplode?.Invoke(_hitPoint);
                 }
             
                 Collider[] colliders = Physics.OverlapSphere(_hitPoint, _explosionRadius, _explsionMask);

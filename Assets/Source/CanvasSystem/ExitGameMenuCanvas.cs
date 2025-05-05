@@ -16,7 +16,11 @@ namespace CanvasSystem
         [SerializeField] private Button _cancelButton;
         [SerializeField, SceneDropdown] private string _lobbySceneName;
         [SerializeField] private InputController _inputController;
+        
+        [SerializeField] private Canvas _hudCanvas;
 
+        public static ExitGameMenuCanvas Instance { get; private set; }
+        
         public bool Enabled
         {
             get => _canvas.enabled;
@@ -27,6 +31,8 @@ namespace CanvasSystem
                 _canvas.enabled = value;
                 _inputController.enabled = !value;
             
+                _hudCanvas.enabled = !value;
+                
                 Cursor.visible = value;
                 Cursor.lockState = value ? CursorLockMode.None : CursorLockMode.Locked;
             }
@@ -34,6 +40,8 @@ namespace CanvasSystem
         
         private void Awake()
         {
+            Instance = this;
+            
             SettingsCanvas.Instance?.HideSettings(_canvas);
         
             _confrimButton.onClick.AddListener(ConfirmButtonHandler);

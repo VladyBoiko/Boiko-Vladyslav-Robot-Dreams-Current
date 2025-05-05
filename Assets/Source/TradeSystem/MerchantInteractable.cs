@@ -72,7 +72,7 @@ namespace TradeSystem
 
         private void CloseInteractMenu()
         {
-            Debug.Log("CloseInteractMenu");
+            // Debug.Log("CloseInteractMenu");
             
             _active = false;
             _inputController.OnCloseInteractMenu -= CloseInteractMenu;

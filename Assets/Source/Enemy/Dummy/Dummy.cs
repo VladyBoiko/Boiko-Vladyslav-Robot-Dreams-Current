@@ -29,7 +29,7 @@ namespace Enemy.Dummy
 
         private void DeathHandler()
         {
-            Debug.Log($"{name} has died. Starting regeneration...");
+            // Debug.Log($"{name} has died. Starting regeneration...");
         
             StartCoroutine(RegenerationRoutine());
         }

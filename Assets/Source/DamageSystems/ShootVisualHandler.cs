@@ -37,14 +37,13 @@ namespace DamageSystems
             // _shooter.OnHit -= HandleHit;
         }
 
-        private void HandleShot()
+        private void HandleShot(string gunName)
         {
             // Debug.Log("Shot called");
             
             if (!_muzzleFlashPrefab || !_muzzleFlashPoint) return;
             
-            Instantiate(_muzzleFlashPrefab, _muzzleFlashPoint.position, 
-                     _muzzleFlashPoint.rotation);
+            Instantiate(_muzzleFlashPrefab, _muzzleFlashPoint.position, _muzzleFlashPoint.rotation);
             
             // GameObject muzzleFlash = 
             //     Instantiate(_muzzleFlashPrefab, _muzzleFlashPoint.position, 

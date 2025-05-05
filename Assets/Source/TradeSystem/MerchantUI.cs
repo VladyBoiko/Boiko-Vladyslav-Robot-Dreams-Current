@@ -32,10 +32,10 @@ namespace TradeSystem
         public void Show()
         {
             _canvas.enabled = true;
-            _buyList.Open(_merchantInteractable.TradeTable.BuyTable, _merchantInteractable.Inventory, _inventoryService.Inventory);
             _buyList.SetBuyMode(true);
-            _sellList.Open(_merchantInteractable.TradeTable.SellTable, _inventoryService.Inventory, _merchantInteractable.Inventory);
+            _buyList.Open(_merchantInteractable.TradeTable.BuyTable, _merchantInteractable.Inventory, _inventoryService.Inventory);
             _sellList.SetBuyMode(false);
+            _sellList.Open(_merchantInteractable.TradeTable.SellTable, _inventoryService.Inventory, _merchantInteractable.Inventory);
         }
 
         public void Hide()

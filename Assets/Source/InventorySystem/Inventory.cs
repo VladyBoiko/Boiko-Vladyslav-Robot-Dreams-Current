@@ -13,7 +13,13 @@ namespace InventorySystem
         private readonly InventoryService _inventoryService;
 
         public int Count => _entries.Count;
-        
+
+        public Dictionary<ItemBase, List<ItemEntry>> Items
+        {
+            get => _items;
+            set => _items = value ?? new();
+        }
+
         public ItemEntry this[int index] => _entries[index];
         
         public Inventory()

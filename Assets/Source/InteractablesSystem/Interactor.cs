@@ -32,7 +32,7 @@ namespace InteractablesSystem
         {
             if (_interactableService.CanInteract(other, out IInteractable interactable))
             {
-                Debug.Log($"Trigger entered: {other.name}");
+                // Debug.Log($"Trigger entered: {other.name}");
                 _interactables.Add(interactable);
                 if (_currentInteractable == null)
                 {

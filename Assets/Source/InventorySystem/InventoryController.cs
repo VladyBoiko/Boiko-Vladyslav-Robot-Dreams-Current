@@ -22,5 +22,10 @@ namespace InventorySystem
             // _inventoryService.ToggleInventory();
             _inventoryService.ShowInventory();
         }
+
+        private void OnDestroy()
+        {
+            _inputController.OnInventory -= InventoryHandler;
+        }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CanvasSystem;
 using HealthSystems;
 using InteractablesSystem;
 using Services;
@@ -161,6 +162,9 @@ namespace Player.Animation
 
         public void CharacterRevived()
         {
+            if (ExitGameMenuCanvas.Instance != null && ExitGameMenuCanvas.Instance.Enabled)
+                return;
+            
             _inputController.Unlock();
             _handsIK.EnableIK();
         }

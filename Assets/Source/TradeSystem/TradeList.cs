@@ -98,7 +98,6 @@ namespace TradeSystem
                         
                             hasProduct = total >= tradeEntry.productAmount;
                         }
-                        
                         hasPayment = _playerController.Currency 
                                      >= tradeEntry.price;
                         

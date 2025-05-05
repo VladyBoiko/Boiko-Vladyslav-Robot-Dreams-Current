@@ -1,3 +1,4 @@
+using Attributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -11,7 +12,7 @@ namespace CanvasSystem
         [SerializeField] private Canvas _settingsCanvas;
     
         [SerializeField] private InputActionAsset _inputActionAsset;
-        [SerializeField] private string _UIMapName;
+        [SerializeField, ActionMapDropdown] private string _UIMapName;
 
         private InputActionMap _UIActionMap;
     
@@ -23,8 +24,7 @@ namespace CanvasSystem
         {
             _inputActionAsset.Enable();
         
-            _UIActionMap = _inputActionAsset?.FindActionMap(_UIMapName)
-                           ?? _inputActionAsset?.FindActionMap("UI");
+            _UIActionMap = _inputActionAsset?.FindActionMap(_UIMapName);
         
             if (Instance == null)
             {

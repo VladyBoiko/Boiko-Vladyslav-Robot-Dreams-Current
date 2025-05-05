@@ -6,7 +6,8 @@ namespace DamageSystems
     public abstract class ShooterBase : MonoBehaviour
     {
         public event Action<string, Vector3, Vector3, Collider> OnHit;
-        public event Action OnShot;
+        public event Action<Vector3, string> OnHitPointHit;
+        public event Action<string> OnShot;
 
         [SerializeField] protected Transform _gunTransform;
 
@@ -29,6 +30,7 @@ namespace DamageSystems
         private void HandleBulletHit(string shootingModeName, Collision collision)
         {
             OnHit?.Invoke(shootingModeName, collision.contacts[0].point, collision.contacts[0].normal, collision.collider);
+            OnHitPointHit?.Invoke(collision.transform.position, "MachineGun");
         }
         
         private void HandleBulletDestroyed(Bullet bullet)
@@ -37,8 +39,13 @@ namespace DamageSystems
             bullet.OnDestroyed -= HandleBulletDestroyed;
         }
 
-        protected void InvokeShot() => OnShot?.Invoke();
-        
+        protected void InvokeShot(string gunName) => OnShot?.Invoke(gunName);
+
+        // protected void InvokeHitPointHit(Vector3 hitPoint, string gunName)
+        // {
+        //     OnHitPointHit?.Invoke(hitPoint, gunName);
+        // }
+
         protected void InvokeHit(string mode, Vector3 point, Vector3 normal, Collider col)
         {
             OnHit?.Invoke(mode, point, normal, col);

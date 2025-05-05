@@ -1,12 +1,15 @@
 using System;
 using DamageSystems;
 using HealthSystems;
+using Player;
+using Player.Animation;
+using SaveSystem;
 using Services;
 using UnityEngine;
 
 namespace CanvasSystem.Score
 {
-    public class ScoreSystem : MonoServiceBase
+    public class ScoreSystem : MonoServiceBase /*GlobalMonoServiceBase*/
     {
         public event Action OnDataUdpated;
         
@@ -14,7 +17,10 @@ namespace CanvasSystem.Score
         
         [SerializeField] private HealthSystem _healthSystem;
         // [SerializeField] private DamageDealer _damageDealer;
-        [SerializeField] private DamageDealerBase _damageDealer;    
+        [SerializeField] private DamageDealerBase _damageDealer; 
+        [SerializeField] private AnimatedPlayerDeath _animatedPlayerDeath;
+        
+        private ISaveService _saveService;
         
         private string _playerName;
         private Vector2Int _kd;
@@ -23,7 +29,7 @@ namespace CanvasSystem.Score
         private int _hitCount;
         
         public string PlayerName => _playerName;
-        public Vector2Int KD => _kd;
+        public Vector2Int Kd => _kd;
         public int Score => _score;
         public int HitCount => _hitCount;
         public int ShotCount => _shotCount;
@@ -31,13 +37,38 @@ namespace CanvasSystem.Score
 
         private void Start()
         {
+            _saveService = ServiceLocator.Instance.GetService<ISaveService>();
+
+            ScoreSaveData scoreData = _saveService.SaveData.scoreData;
+            
+            _score = scoreData.score;
+            _hitCount = scoreData.hitCount;
+            _shotCount = scoreData.shotCount;
+            _kd = scoreData.kd;
+            
             _damageDealer.OnHit += HitHandler;
             _damageDealer.Shooter.OnShot += ShotHandler;
             _healthSystem.OnCharacterDeath += CharacterDeathHandler;
+            _animatedPlayerDeath.OnPlayerDeath += PlayerDeathHandler;
 
             _playerName = _damageDealer.name;
         }
 
+        protected override void OnDestroy()
+        {
+            _saveService.SaveData.scoreData.score = _score;
+            _saveService.SaveData.scoreData.hitCount = _hitCount;
+            _saveService.SaveData.scoreData.shotCount = _shotCount;
+            _saveService.SaveData.scoreData.kd = _kd;
+            
+            _damageDealer.OnHit -= HitHandler;
+            _damageDealer.Shooter.OnShot -= ShotHandler;
+            _healthSystem.OnCharacterDeath -= CharacterDeathHandler;
+            _animatedPlayerDeath.OnPlayerDeath -= PlayerDeathHandler;
+            
+            base.OnDestroy();
+        }
+        
         private void HitHandler(int hits, int score)
         {
             _hitCount += hits;
@@ -45,7 +76,7 @@ namespace CanvasSystem.Score
             OnDataUdpated?.Invoke();
         }
 
-        private void ShotHandler()
+        private void ShotHandler(string gunName)
         {
             _shotCount++;
             OnDataUdpated?.Invoke();
@@ -53,8 +84,18 @@ namespace CanvasSystem.Score
 
         private void CharacterDeathHandler(Health health)
         {
+            if(health == _animatedPlayerDeath.Health)
+                return;
             _kd.x++;
             _score += 10;
+            OnDataUdpated?.Invoke();
+        }
+
+        private void PlayerDeathHandler(Health health)
+        {
+            if (health != _animatedPlayerDeath.Health)
+                return;
+            _kd.y++;
             OnDataUdpated?.Invoke();
         }
     }

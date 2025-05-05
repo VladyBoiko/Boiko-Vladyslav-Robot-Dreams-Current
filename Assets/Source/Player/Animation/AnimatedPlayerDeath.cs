@@ -8,6 +8,8 @@ namespace Player.Animation
 {
     public class AnimatedPlayerDeath : MonoBehaviour
     {
+        public event Action<Health> OnPlayerDeath; 
+        
         [SerializeField] private Health _health;
         [SerializeField] private GameObject _logicalPlayer;
         
@@ -16,6 +18,8 @@ namespace Player.Animation
         [SerializeField] private float _crossFadeTime  = 0.125f;
 
         [SerializeField] private string _deathName;
+        
+        public Health Health => _health;
         
         private void Start()
         {
@@ -30,6 +34,7 @@ namespace Player.Animation
         private void DeathHandler()
         {
             StartCoroutine(DeathRoutine());
+            OnPlayerDeath?.Invoke(_health);
         }
 
         private IEnumerator DeathRoutine()

@@ -55,7 +55,8 @@ namespace Player
 
         private void CharacterDeathHandler(Health health)
         {
-            _currency += 10;
+            if(health != _health)
+                _currency += 10;
         }
         
         private void MoveHandler(Vector2 moveInput)

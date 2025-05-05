@@ -48,8 +48,8 @@ namespace CanvasSystem.Score
 
         private void UpdateScoreUI()
         {
-            _kills.text = _scoreSystem.KD.x.ToString();
-            _deaths.text = _scoreSystem.KD.y.ToString();
+            _kills.text = _scoreSystem.Kd.x.ToString();
+            _deaths.text = _scoreSystem.Kd.y.ToString();
         
             _score.text = _scoreSystem.Score.ToString();
         

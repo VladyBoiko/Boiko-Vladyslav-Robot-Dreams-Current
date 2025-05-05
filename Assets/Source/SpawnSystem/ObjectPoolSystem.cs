@@ -40,7 +40,7 @@ namespace SpawnSystem
                 var obj = _pool.Dequeue();
                 if (obj.gameObject.activeSelf)
                 {
-                    Debug.LogWarning($"[ObjectPool] Trying to get active object: {typeof(T)}");
+                    // Debug.LogWarning($"[ObjectPool] Trying to get active object: {typeof(T)}");
                     return null;
                 }
                 obj.gameObject.SetActive(true);
@@ -52,7 +52,7 @@ namespace SpawnSystem
                 return CreateObject();
             }
 
-            Debug.LogWarning($"[ObjectPool] Pool exhausted for type {typeof(T)}.");
+            // Debug.LogWarning($"[ObjectPool] Pool exhausted for type {typeof(T)}.");
             return null;
         }
 

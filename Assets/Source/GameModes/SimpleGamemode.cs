@@ -9,6 +9,7 @@ namespace Gamemodes
 {
     public class SimpleGameMode: MonoServiceBase, IModeService
     {
+        public event Action OnStart; 
         public event Action<bool> OnComplete;
 
         [SerializeField] private float _gameModeDuration;
@@ -58,6 +59,7 @@ namespace Gamemodes
             }
 
             enabled = true;
+            OnStart?.Invoke();
         }
 
         private void Update()

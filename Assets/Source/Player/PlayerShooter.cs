@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using DamageSystems;
 using UnityEngine;
@@ -6,6 +7,9 @@ namespace Player
 {
     public class PlayerShooter : ShooterBase
     {
+        public event Action OnStartedCharge;
+        public event Action OnStoppedCharge;
+        
         private enum ShootingMode
         {
             RayCast,
@@ -106,7 +110,9 @@ namespace Player
         {
             if (performed)
             {
+                OnStartedCharge?.Invoke();
                 _isCharging = true;
+                
             }
             else
             {
@@ -130,6 +136,8 @@ namespace Player
 
         private void ResetCharge()
         {
+            OnStoppedCharge?.Invoke();
+            
             _currentCharge = 0f;
             _isCharging = false;
         }
@@ -140,16 +148,17 @@ namespace Player
             {
                 case ShootingMode.RayCast:
                     RaycastShoot();
+                    InvokeShot("Blaster");
                     break;
                 case ShootingMode.SphereCast:
                     SphereCastShoot();
+                    InvokeShot("Blaster");
                     break;
                 case ShootingMode.ObjectSpawn:
                     ObjectSpawnShoot();
+                    InvokeShot("MachineGun");
                     break;
             }
-
-            InvokeShot();
         }
 
         
@@ -162,7 +171,9 @@ namespace Player
             {
                 _hitPoint = hitInfo.point;
                 InvokeHit("Raycast", hitInfo.point, hitInfo.normal, hitInfo.collider);
+                // InvokeHitPointHit(hitInfo.point, "Blaster");
             }
+            
             DrawShot(_hitPoint);
         }
 
@@ -177,8 +188,9 @@ namespace Player
                 Vector3 projected = Vector3.Project(direct, ray.direction);
                 _hitPoint = _gunTransform.position + projected;
                 InvokeHit("SphereCast", hitInfo.point, hitInfo.normal, hitInfo.collider);
+                // InvokeHitPointHit(hitInfo.point, "Blaster");
             }
-
+            
             DrawShot(_hitPoint);
         }
 

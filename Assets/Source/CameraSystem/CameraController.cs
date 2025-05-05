@@ -3,6 +3,7 @@ using Player;
 using Services;
 using UnityEngine;
 using System;
+using GameSettings;
 
 namespace CameraSystem
 {

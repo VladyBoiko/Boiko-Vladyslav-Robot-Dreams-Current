@@ -8,7 +8,7 @@ namespace Enemy
         public void Shoot()
         {
             ObjectSpawnShoot();
-            InvokeShot();
+            InvokeShot("MachineGun");
         }
     }
 }
