@@ -20,7 +20,7 @@ namespace CanvasSystem.Score
         [SerializeField] private DamageDealerBase _damageDealer; 
         [SerializeField] private AnimatedPlayerDeath _animatedPlayerDeath;
         
-        private ISaveService _saveService;
+        // private ISaveService _saveService;
         
         private string _playerName;
         private Vector2Int _kd;
@@ -37,15 +37,15 @@ namespace CanvasSystem.Score
 
         private void Start()
         {
-            _saveService = ServiceLocator.Instance.GetService<ISaveService>();
+            // _saveService = ServiceLocator.Instance.GetService<ISaveService>();
 
-            ScoreSaveData scoreData = _saveService.SaveData.scoreData;
-            
-            _score = scoreData.score;
-            _hitCount = scoreData.hitCount;
-            _shotCount = scoreData.shotCount;
-            _kd = scoreData.kd;
-            
+            // ScoreSaveData scoreData = _saveService.SaveData.scoreData;
+            //
+            // _score = scoreData.score;
+            // _hitCount = scoreData.hitCount;
+            // _shotCount = scoreData.shotCount;
+            // _kd = scoreData.kd;
+            //
             _damageDealer.OnHit += HitHandler;
             _damageDealer.Shooter.OnShot += ShotHandler;
             _healthSystem.OnCharacterDeath += CharacterDeathHandler;
@@ -56,10 +56,10 @@ namespace CanvasSystem.Score
 
         protected override void OnDestroy()
         {
-            _saveService.SaveData.scoreData.score = _score;
-            _saveService.SaveData.scoreData.hitCount = _hitCount;
-            _saveService.SaveData.scoreData.shotCount = _shotCount;
-            _saveService.SaveData.scoreData.kd = _kd;
+            // _saveService.SaveData.scoreData.score = _score;
+            // _saveService.SaveData.scoreData.hitCount = _hitCount;
+            // _saveService.SaveData.scoreData.shotCount = _shotCount;
+            // _saveService.SaveData.scoreData.kd = _kd;
             
             _damageDealer.OnHit -= HitHandler;
             _damageDealer.Shooter.OnShot -= ShotHandler;

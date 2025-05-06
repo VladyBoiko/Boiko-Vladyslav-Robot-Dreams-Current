@@ -27,7 +27,7 @@ namespace InventorySystem
         private Inventory _inventory;
         private PlayerController _playerController;
         private InputController _inputController;
-        private ISaveService _saveService;
+        // private ISaveService _saveService;
 
         private int _currency;
         
@@ -68,7 +68,7 @@ namespace InventorySystem
 
         private void Start()
         {
-            _saveService = ServiceLocator.Instance.GetService<ISaveService>();
+            // _saveService = ServiceLocator.Instance.GetService<ISaveService>();
             _playerController = ServiceLocator.Instance.GetService<PlayerController>();
             _inputController = ServiceLocator.Instance.GetService<InputController>();
             
@@ -130,55 +130,55 @@ namespace InventorySystem
             // }
             //
             // _saveService.SaveData.inventoryData.items = serializedItems;
-            Dictionary<string, int> combinedItems = new Dictionary<string, int>();
+            // Dictionary<string, int> combinedItems = new Dictionary<string, int>();
+            //
+            // foreach (var itemEntries in _inventory.Items)
+            // {
+            //     foreach (var entry in itemEntries.Value)
+            //     {
+            //         string itemId = entry.Item.Id;
+            //         int count = entry.Count;
+            //
+            //         if (combinedItems.ContainsKey(itemId))
+            //         {
+            //             combinedItems[itemId] += count;
+            //         }
+            //         else
+            //         {
+            //             combinedItems[itemId] = count;
+            //         }
+            //     }
+            // }
+            //
+            // List<InventoryItemData> serializedItems = new List<InventoryItemData>();
+            // foreach (var entry in combinedItems)
+            // {
+            //     serializedItems.Add(new InventoryItemData
+            //     {
+            //         itemId = entry.Key,
+            //         count = entry.Value
+            //     });
+            // }
             
-            foreach (var itemEntries in _inventory.Items)
-            {
-                foreach (var entry in itemEntries.Value)
-                {
-                    string itemId = entry.Item.Id;
-                    int count = entry.Count;
-            
-                    if (combinedItems.ContainsKey(itemId))
-                    {
-                        combinedItems[itemId] += count;
-                    }
-                    else
-                    {
-                        combinedItems[itemId] = count;
-                    }
-                }
-            }
-            
-            List<InventoryItemData> serializedItems = new List<InventoryItemData>();
-            foreach (var entry in combinedItems)
-            {
-                serializedItems.Add(new InventoryItemData
-                {
-                    itemId = entry.Key,
-                    count = entry.Value
-                });
-            }
-            
-            _saveService.SaveData.inventoryData.items = serializedItems;
+            // _saveService.SaveData.inventoryData.items = serializedItems;
             // Debug.Log(_playerController.Currency);
-            _saveService.SaveData.inventoryData.currency = _playerController.Currency;
+            // _saveService.SaveData.inventoryData.currency = _playerController.Currency;
         }
 
         private void LoadInventory()
         {
-            InventorySaveData inventoryData = _saveService.SaveData.inventoryData;
+            // InventorySaveData inventoryData = _saveService.SaveData.inventoryData;
             // Debug.Log(inventoryData.items.Count);
             
-            if (inventoryData.items != null && inventoryData.items.Count != 0)
-            {
-                for (int i = 0; i < inventoryData.items.Count; i++)
-                {
-                    InventoryItemData itemData = inventoryData.items[i];
-                    _inventory.Add(itemData.itemId, itemData.count);
-                }
-            }
-            else
+            // if (inventoryData.items != null && inventoryData.items.Count != 0)
+            // {
+            //     for (int i = 0; i < inventoryData.items.Count; i++)
+            //     {
+            //         InventoryItemData itemData = inventoryData.items[i];
+            //         _inventory.Add(itemData.itemId, itemData.count);
+            //     }
+            // }
+            // else
             {
                 for (int i = 0; i < _startingItems.Length; i++)
                 {
@@ -186,9 +186,10 @@ namespace InventorySystem
                     _inventory.Add(startingItem.id, startingItem.count);
                 }
             }
-            _currency = inventoryData.currency > 0 ? inventoryData.currency : _startingCurrency;
+            // _currency = inventoryData.currency > 0 ? inventoryData.currency : _startingCurrency;
             
-            _playerController.SetCurrency(_currency);
+            // _playerController.SetCurrency(_currency);
+            _playerController.SetCurrency(_startingCurrency);
         }
     }
 }

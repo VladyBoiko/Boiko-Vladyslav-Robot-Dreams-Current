@@ -91,6 +91,11 @@ namespace Player
         
         private void ShootInputHandler(bool performed)
         {
+            Shot(performed);
+        }
+
+        public void Shot(bool performed)
+        {
             switch (_shootingMode)
             {
                 case ShootingMode.RayCast:
@@ -105,7 +110,7 @@ namespace Player
                     break;
             }
         }
-
+        
         private void HandleChargeInput(bool performed)
         {
             if (performed)

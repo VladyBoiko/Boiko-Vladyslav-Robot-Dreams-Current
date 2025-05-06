@@ -3,6 +3,7 @@ using BillBoards;
 using CameraSystem;
 using Services;
 using UnityEngine;
+using XR;
 
 namespace InteractablesSystem
 {
@@ -25,7 +26,8 @@ namespace InteractablesSystem
             // Debug.Log($"Registering interactable {gameObject.name} with collider {collider.name}");
             
             ServiceLocator.Instance.GetService<InteractableService>().AddInteractable(collider, this);
-            tooltip.SetCamera(ServiceLocator.Instance.GetService<CameraController>().Camera);
+            // tooltip.SetCamera(ServiceLocator.Instance.GetService<CameraController>().Camera);
+            tooltip.SetCamera(ServiceLocator.Instance.GetService<XRPlayerController>().Camera);
             Highlight(false);
             
             _transform = collider.transform;

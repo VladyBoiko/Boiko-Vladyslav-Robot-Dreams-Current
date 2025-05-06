@@ -19,7 +19,7 @@ namespace DamageSystems
             _hitPoint = _cameraTransform.position + _cameraTransform.forward * _rayDistance;
             if (Physics.Raycast(ray, out RaycastHit hitInfo, _rayDistance, _rayMask, QueryTriggerInteraction.Ignore))
                 _hitPoint = hitInfo.point;
-            _gunTransform.LookAt(_hitPoint);
+            // _gunTransform.LookAt(_hitPoint);
         }
     
         private void OnDrawGizmos()
