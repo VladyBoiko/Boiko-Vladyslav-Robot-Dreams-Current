@@ -20,6 +20,7 @@ namespace XR
             _handRotation.Enable();
             _trigger.Enable();
             _trigger.performed += TriggerPerformedHandler;
+            _trigger.canceled += TriggerCanceledHandler;
         }
 
         private void Update()
@@ -34,8 +35,18 @@ namespace XR
 
         private void TriggerPerformedHandler(InputAction.CallbackContext context)
         {
+            ShotHandler(true);
+        }
+
+        private void TriggerCanceledHandler(InputAction.CallbackContext context)
+        {
+            ShotHandler(false);
+        }
+
+        private void ShotHandler(bool isPerformed)
+        {
             PlayerShooter playerShooter = _gun as PlayerShooter;
-            if (playerShooter != null) playerShooter.Shot(true);
+            if (playerShooter != null) playerShooter.Shot(isPerformed);
         }
     }
 }

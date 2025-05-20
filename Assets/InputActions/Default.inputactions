@@ -238,17 +238,6 @@
                 },
                 {
                     "name": "",
-                    "id": "4eeb8013-d0ae-4288-b51c-f4bd8dbccfce",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Shoot",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "4ff79d62-2f88-4e58-89a9-14f11867a747",
                     "path": "<Keyboard>/x",
                     "interactions": "",
@@ -293,6 +282,17 @@
                 },
                 {
                     "name": "",
+                    "id": "1eddf692-3c84-41f6-bcd3-2179551d6e95",
+                    "path": "<XRController>{RightHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "d84cbee0-211a-4d5a-9fe1-56dd9de7bb08",
                     "path": "<Keyboard>/i",
                     "interactions": "",
@@ -304,12 +304,12 @@
                 },
                 {
                     "name": "",
-                    "id": "1eddf692-3c84-41f6-bcd3-2179551d6e95",
-                    "path": "<XRController>{RightHand}/primaryButton",
+                    "id": "de6e65a4-dbb7-42dc-90c0-4bf35f1c8163",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Inventory",
+                    "action": "Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -363,6 +363,17 @@
                 },
                 {
                     "name": "",
+                    "id": "cac2589d-c49d-4f3f-b9e4-7bcac152d1ff",
+                    "path": "<XRController>{RightHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CloseInteractable",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "7fce17db-9d4e-4ec7-a4d3-5c25d0b1eaa4",
                     "path": "<Keyboard>/i",
                     "interactions": "",
@@ -376,17 +387,6 @@
                     "name": "",
                     "id": "d5aa0752-d2f2-48bf-806d-f50190112d4c",
                     "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "CloseInventory",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "cac2589d-c49d-4f3f-b9e4-7bcac152d1ff",
-                    "path": "<XRController>{RightHand}/primaryButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
