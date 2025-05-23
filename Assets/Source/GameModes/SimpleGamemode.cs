@@ -27,30 +27,34 @@ namespace Gamemodes
         
         public float Time => _time;
         
+        private int _currentScore;
+        
         protected override void Awake()
         {
             base.Awake();
             ServiceLocator.Instance.AddServiceExplicit(typeof(SimpleGameMode), this);
         }
         
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            ServiceLocator.Instance.RemoveServiceExplicit(typeof(SimpleGameMode), this);
-        }
-        
         private void Start()
         {
             _playerController = ServiceLocator.Instance.GetService<PlayerController>();
             _scoreSystem = ServiceLocator.Instance.GetService<ScoreSystem>();
-            
+            _scoreSystem.OnScoreUpdated += ScoreUpdatedHandler;
             _playerController.Health.OnDeath += PlayerDeathHandler;
             
             enabled = false;
         }
         
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            ServiceLocator.Instance.RemoveServiceExplicit(typeof(SimpleGameMode), this);
+            _scoreSystem.OnScoreUpdated -= ScoreUpdatedHandler;
+        }
+        
         public void Begin()
         {
+            _currentScore = 0;
             _time = 0f;
 
             for (int i = 0; i < _spawners.Length; i++)
@@ -66,7 +70,7 @@ namespace Gamemodes
         {
             _time += UnityEngine.Time.deltaTime;
             
-            if (_time >= _gameModeDuration || _scoreSystem.Score >= _maxScore)
+            if (_time >= _gameModeDuration || _currentScore >= _maxScore)
             {
                 enabled = false;
                 
@@ -80,6 +84,12 @@ namespace Gamemodes
                 // Debug.Log("Game Over");
                 return;
             }
+        }
+
+        private void ScoreUpdatedHandler(int score)
+        {
+            _currentScore += score;
+            Debug.Log($"Score: {_currentScore}");
         }
         
         private void PlayerDeathHandler()

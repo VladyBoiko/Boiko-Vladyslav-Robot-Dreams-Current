@@ -12,6 +12,7 @@ namespace CanvasSystem.Score
     public class ScoreSystem : MonoServiceBase /*GlobalMonoServiceBase*/
     {
         public event Action OnDataUdpated;
+        public event Action<int> OnScoreUpdated;
         
         public override Type Type { get; } = typeof(ScoreSystem);
         
@@ -95,6 +96,7 @@ namespace CanvasSystem.Score
                 return;
             _kd.x++;
             _score += 10;
+            OnScoreUpdated?.Invoke(10);
             SaveScore();
             OnDataUdpated?.Invoke();
         }

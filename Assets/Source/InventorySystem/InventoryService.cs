@@ -172,25 +172,37 @@ namespace InventorySystem
             InventorySaveData inventoryData = _saveService.SaveData.inventoryData;
             // Debug.Log(inventoryData.items.Count);
 
-            List<InventoryItemData> serializedItems = new List<InventoryItemData>(inventoryData.items);
-            
-            if (serializedItems.Count != 0)
-            {
-                for (int i = 0; i < serializedItems.Count; i++)
-                {
-                    InventoryItemData itemData = serializedItems[i];
-                    _inventory.Add(itemData.itemId, itemData.count);
-                }
-            }
-            else
+            if (inventoryData.items == null || inventoryData.items.Length == 0)
             {
                 Debug.Log("No items found to load inventory");
-                // for (int i = 0; i < _startingItems.Length; i++)
-                // {
-                //     ItemData startingItem = _startingItems[i];
-                //     _inventory.Add(startingItem.id, startingItem.count);
-                // }
+                return;
             }
+
+            for (int i = 0; i < inventoryData.items.Length; i++)
+            {
+                InventoryItemData itemData = inventoryData.items[i];
+                _inventory.Add(itemData.itemId, itemData.count);
+            }
+            
+            // List<InventoryItemData> serializedItems = new List<InventoryItemData>(inventoryData.items);
+            //
+            // if (serializedItems.Count != 0)
+            // {
+            //     for (int i = 0; i < serializedItems.Count; i++)
+            //     {
+            //         InventoryItemData itemData = serializedItems[i];
+            //         _inventory.Add(itemData.itemId, itemData.count);
+            //     }
+            // }
+            // else
+            // {
+            //     Debug.Log("No items found to load inventory");
+            //     // for (int i = 0; i < _startingItems.Length; i++)
+            //     // {
+            //     //     ItemData startingItem = _startingItems[i];
+            //     //     _inventory.Add(startingItem.id, startingItem.count);
+            //     // }
+            // }
             // _currency = inventoryData.currency > 0 ? inventoryData.currency : _startingCurrency;
             //
             // _playerController.SetCurrency(_currency);
