@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0304e1d87a0042c0a8c7c332dea3dba1, type: 3}
   m_Name: SceneData
   m_EditorClassIdentifier: 
-  _bootSceneName: Assets/Scenes/Main menu.unity
+  _bootSceneName: Assets/Scenes/Boot.unity
   _lobbySceneNames:
   - sceneName: Main menu
     scenePath: Scenes/Main menu

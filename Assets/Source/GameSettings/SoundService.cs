@@ -50,7 +50,7 @@ namespace GameSettings
             
             SetVolume(SoundType.Master, saveData.masterVolume);
             SetVolume(SoundType.Sfx, saveData.sfxVolume);
-            SetVolume(SoundType.Ambience, saveData.ambienceVolume);
+            SetVolume(SoundType.Music, saveData.ambienceVolume);
         }
 
         public void SetVolume(SoundType type, float volume)
@@ -64,7 +64,7 @@ namespace GameSettings
                 case SoundType.Sfx:
                     _saveService.SaveData.soundData.sfxVolume = volume;
                     break;
-                case SoundType.Ambience:
+                case SoundType.Music:
                     _saveService.SaveData.soundData.ambienceVolume = volume;
                     break;
             }

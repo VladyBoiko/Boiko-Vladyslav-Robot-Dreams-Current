@@ -67,11 +67,7 @@ namespace SaveSystem
                     soundData = SoundSaveData.Default,
                     localizationData = new LocalizationSaveData(),
                     scoreData = new ScoreSaveData(),
-                    inventoryData = new InventorySaveData
-                    {
-                        items = new List<InventoryItemData>(),
-                        currency = 0
-                    }
+                    inventoryData = new InventorySaveData()
                 };
                 return;
             }

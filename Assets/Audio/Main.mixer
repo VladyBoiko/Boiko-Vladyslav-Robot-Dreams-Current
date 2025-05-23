@@ -50,7 +50,7 @@ AudioMixerController:
   m_UpdateMode: 0
   m_ExposedParameters:
   - guid: 7cef2dbcb533c3a48ae7f7d158d699f8
-    name: AmbienceVolume
+    name: MusicVolume
   - guid: 0f9b9160a14c9df43a6dbe271747dc86
     name: MasterVolume
   - guid: dec7045150fff0c4aac5829754fb0233
@@ -110,7 +110,7 @@ AudioMixerSnapshotController:
   m_FloatValues:
     0f9b9160a14c9df43a6dbe271747dc86: -5
     dec7045150fff0c4aac5829754fb0233: -5
-    7cef2dbcb533c3a48ae7f7d158d699f8: 0
+    7cef2dbcb533c3a48ae7f7d158d699f8: -5
   m_TransitionOverrides: {}
 --- !u!244 &4280832469381109227
 AudioMixerEffectController:
@@ -132,7 +132,7 @@ AudioMixerGroupController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Ambience
+  m_Name: Music
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: 318e0ca230d0c0e49886daf84d5d9fe8
   m_Children: []

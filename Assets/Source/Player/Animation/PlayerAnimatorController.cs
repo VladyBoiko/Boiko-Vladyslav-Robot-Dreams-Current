@@ -98,6 +98,7 @@ namespace Player.Animation
             InitConditions();
             
             _inputController.Lock();
+            _inputController.MenuLock();
             _handsIK.DisableIK();
         }
 
@@ -150,14 +151,25 @@ namespace Player.Animation
             _handsIK.DisableIK();
             _isInteracting = true;
             _inputController.Lock();
+            _inputController.MenuLock();
+            
+            if (_interactable.Type == InteractableType.Menu)
+                _inputController.UILock();
         }
 
         public void InteractionEnded()
         {
             _handsIK.EnableIK();
             _isInteracting = false;
-            if(_interactable.Type != InteractableType.Menu)
+            if (_interactable.Type != InteractableType.Menu)
+            {
                 _inputController.Unlock();
+                _inputController.MenuUnlock();
+            }
+            else
+            {
+                _inputController.UIUnLock();
+            }
         }
 
         public void CharacterRevived()
@@ -166,6 +178,7 @@ namespace Player.Animation
                 return;
             
             _inputController.Unlock();
+            _inputController.MenuUnlock();
             _handsIK.EnableIK();
         }
 

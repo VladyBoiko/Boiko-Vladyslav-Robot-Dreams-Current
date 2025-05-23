@@ -1,5 +1,6 @@
 using Attributes;
 using Player;
+using SaveSystem;
 using Services;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,6 +22,8 @@ namespace CanvasSystem
 
         public static ExitGameMenuCanvas Instance { get; private set; }
         
+        private ISaveService _saveService;
+        
         public bool Enabled
         {
             get => _canvas.enabled;
@@ -29,8 +32,13 @@ namespace CanvasSystem
                 if (_canvas.enabled == value)
                     return;
                 _canvas.enabled = value;
-                _inputController.enabled = !value;
+                // _inputController.enabled = !value;
             
+                if(value)
+                    _inputController.Lock();
+                else
+                    _inputController.Unlock();
+                
                 _hudCanvas.enabled = !value;
                 
                 Cursor.visible = value;
@@ -40,6 +48,8 @@ namespace CanvasSystem
         
         private void Awake()
         {
+            _saveService = ServiceLocator.Instance.GetService<ISaveService>();
+            
             Instance = this;
             
             SettingsCanvas.Instance?.HideSettings(_canvas);
@@ -65,6 +75,7 @@ namespace CanvasSystem
 
         private void ConfirmButtonHandler()
         {
+            _saveService.SaveAll();
             SceneManager.LoadSceneAsync(_lobbySceneName, LoadSceneMode.Single);
         }
 

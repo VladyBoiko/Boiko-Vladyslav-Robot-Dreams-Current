@@ -239,11 +239,7 @@ namespace Player
 
         public void MenuLock()
         {
-            CursorEnable();
-            
             _menuActionMap.Disable();
-
-            UIUnLock();
         }     
         
         public void Unlock()
@@ -258,11 +254,7 @@ namespace Player
 
         public void MenuUnlock()
         {
-            CursorDisable();
-            
             _menuActionMap.Enable();
-            
-            UILock();
         }
 
         public void FullLock()
@@ -276,12 +268,18 @@ namespace Player
         {
             MenuLock();
             Lock();
+            UIUnLock();
+            
+            CursorEnable();
         }
         
         public void CloseMenu()
         {
             MenuUnlock();
             Unlock();
+            UILock();
+            
+            CursorDisable();
         }
         
         private void MovePerformedHandler(InputAction.CallbackContext context)

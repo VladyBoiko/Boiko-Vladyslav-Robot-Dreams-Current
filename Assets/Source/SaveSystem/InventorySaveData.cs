@@ -8,7 +8,7 @@ namespace SaveSystem
     [Serializable]
     public struct InventorySaveData
     {
-        public List<InventoryItemData> items;
+        public InventoryItemData[] items;
         public int currency;
     }
     

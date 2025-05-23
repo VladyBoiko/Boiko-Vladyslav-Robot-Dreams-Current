@@ -56,10 +56,7 @@ namespace CanvasSystem.Score
 
         protected override void OnDestroy()
         {
-            _saveService.SaveData.scoreData.score = _score;
-            _saveService.SaveData.scoreData.hitCount = _hitCount;
-            _saveService.SaveData.scoreData.shotCount = _shotCount;
-            _saveService.SaveData.scoreData.kd = _kd;
+            SaveScore();
             
             _damageDealer.OnHit -= HitHandler;
             _damageDealer.Shooter.OnShot -= ShotHandler;
@@ -68,10 +65,19 @@ namespace CanvasSystem.Score
             
             base.OnDestroy();
         }
+
+        private void SaveScore()
+        {
+            _saveService.SaveData.scoreData.score = _score;
+            _saveService.SaveData.scoreData.hitCount = _hitCount;
+            _saveService.SaveData.scoreData.shotCount = _shotCount;
+            _saveService.SaveData.scoreData.kd = _kd;
+        }
         
         private void HitHandler(int hits, int score)
         {
             _hitCount += hits;
+            SaveScore();
             // _score += score;
             OnDataUdpated?.Invoke();
         }
@@ -79,6 +85,7 @@ namespace CanvasSystem.Score
         private void ShotHandler(string gunName)
         {
             _shotCount++;
+            SaveScore();
             OnDataUdpated?.Invoke();
         }
 
@@ -88,6 +95,7 @@ namespace CanvasSystem.Score
                 return;
             _kd.x++;
             _score += 10;
+            SaveScore();
             OnDataUdpated?.Invoke();
         }
 
@@ -96,6 +104,7 @@ namespace CanvasSystem.Score
             if (health != _animatedPlayerDeath.Health)
                 return;
             _kd.y++;
+            SaveScore();
             OnDataUdpated?.Invoke();
         }
     }

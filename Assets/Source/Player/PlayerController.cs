@@ -3,6 +3,7 @@ using HealthSystems;
 using Services;
 using UnityEngine;
 using System;
+using SaveSystem;
 
 namespace Player
 {
@@ -21,9 +22,10 @@ namespace Player
         private Transform _transform;
         private Vector2 _moveInput;
 
-        private int _currency = 0;
+        private int _currency;
         
         private InputController _inputController;
+        private ISaveService _saveService;
         
         public CharacterController CharacterController => _controller;
         public TargetableBase Targetable => _targetable;
@@ -38,13 +40,20 @@ namespace Player
             _inputController = ServiceLocator.Instance.GetService<InputController>();
             _inputController.OnMoveInput += MoveHandler;
             
+            _saveService = ServiceLocator.Instance.GetService<ISaveService>();
+            LoadPlayerInfo();
+            
             _transform = transform;
             if (_controller) return;
                 Debug.LogError("No CharacterController attached");
             enabled = false;
         }
-        
-        
+
+        private void OnDisable()
+        {
+            SavePlayerInfo();
+        }
+
         private void FixedUpdate()
         {
             Vector3 forward = _transform.forward;
@@ -55,8 +64,11 @@ namespace Player
 
         private void CharacterDeathHandler(Health health)
         {
-            if(health != _health)
+            if (health != _health)
+            {
                 _currency += 10;
+                SavePlayerInfo();
+            }
         }
         
         private void MoveHandler(Vector2 moveInput)
@@ -65,7 +77,7 @@ namespace Player
             _moveInput = moveInput.normalized;
         }
 
-        public void SetCurrency(int amount)
+        private void SetCurrency(int amount)
         {
             _currency = amount;
         }
@@ -73,11 +85,24 @@ namespace Player
         public void AddCurrency(int amount)
         {
             _currency += amount;
+            SavePlayerInfo();
         }
 
         public void RemoveCurrency(int amount)
         {
             _currency -= amount;
+            SavePlayerInfo();
+        }
+
+        private void LoadPlayerInfo()
+        {
+            Debug.Log($"Loading Player Info. Currency: {_saveService.SaveData.inventoryData.currency}");
+            SetCurrency(_saveService.SaveData.inventoryData.currency);
+        }
+
+        private void SavePlayerInfo()
+        {
+            _saveService.SaveData.inventoryData.currency = _currency;
         }
     }
 }

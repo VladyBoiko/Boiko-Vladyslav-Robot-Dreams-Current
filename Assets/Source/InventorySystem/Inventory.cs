@@ -74,6 +74,8 @@ namespace InventorySystem
                 }
                 AddStack(item, amount);
             }
+
+            _inventoryService.SaveInventory();
         }
 
         public bool Remove(string itemId, int amount)
@@ -131,6 +133,8 @@ namespace InventorySystem
             
             for (int i = 0; i < _entries.Count; ++i)
                 _entries[i].SetListPosition(i);
+            
+            _inventoryService.SaveInventory();
             
             return true;
         }

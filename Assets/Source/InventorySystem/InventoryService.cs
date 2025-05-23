@@ -6,6 +6,7 @@ using Player;
 using SaveSystem;
 using Services;
 using UnityEngine;
+using Enumerable = System.Linq.Enumerable;
 
 namespace InventorySystem
 {
@@ -19,13 +20,12 @@ namespace InventorySystem
         }
         
         [SerializeField] private ItemLibrary _itemLibrary;
-
-        [SerializeField] private ItemData[] _startingItems;
+        
         [SerializeField] private int _startingCurrency;
         [SerializeField] private InventoryView _inventoryView;
         
         private Inventory _inventory;
-        private PlayerController _playerController;
+        // private PlayerController _playerController;
         private InputController _inputController;
         private ISaveService _saveService;
 
@@ -69,7 +69,7 @@ namespace InventorySystem
         private void Start()
         {
             _saveService = ServiceLocator.Instance.GetService<ISaveService>();
-            _playerController = ServiceLocator.Instance.GetService<PlayerController>();
+            // _playerController = ServiceLocator.Instance.GetService<PlayerController>();
             _inputController = ServiceLocator.Instance.GetService<InputController>();
             
             _inventory = new();
@@ -89,6 +89,7 @@ namespace InventorySystem
         {
             _inventoryView.Show();
             _inputController.OpenMenu();
+            _inputController.CursorEnable();
             _inputController.OnCloseInventory += CloseInventoryHandler;
         }
 
@@ -99,6 +100,7 @@ namespace InventorySystem
             _inventoryView.Hide();
             _inputController.OnCloseInventory -= CloseInventoryHandler;
             _inputController.CloseMenu();
+            _inputController.CursorDisable();
         }
 
         // public void ToggleInventory()
@@ -113,7 +115,7 @@ namespace InventorySystem
             HideInventory();
         }
         
-        private void SaveInventory()
+        public void SaveInventory()
         {
             // List<InventoryItemData> serializedItems = new List<InventoryItemData>();
             //
@@ -160,35 +162,38 @@ namespace InventorySystem
                 });
             }
             
-            _saveService.SaveData.inventoryData.items = serializedItems;
+            _saveService.SaveData.inventoryData.items = serializedItems.ToArray();
             // Debug.Log(_playerController.Currency);
-            _saveService.SaveData.inventoryData.currency = _playerController.Currency;
+            // _saveService.SaveData.inventoryData.currency = _playerController.Currency;
         }
 
         private void LoadInventory()
         {
             InventorySaveData inventoryData = _saveService.SaveData.inventoryData;
             // Debug.Log(inventoryData.items.Count);
+
+            List<InventoryItemData> serializedItems = new List<InventoryItemData>(inventoryData.items);
             
-            if (inventoryData.items != null && inventoryData.items.Count != 0)
+            if (serializedItems.Count != 0)
             {
-                for (int i = 0; i < inventoryData.items.Count; i++)
+                for (int i = 0; i < serializedItems.Count; i++)
                 {
-                    InventoryItemData itemData = inventoryData.items[i];
+                    InventoryItemData itemData = serializedItems[i];
                     _inventory.Add(itemData.itemId, itemData.count);
                 }
             }
             else
             {
-                for (int i = 0; i < _startingItems.Length; i++)
-                {
-                    ItemData startingItem = _startingItems[i];
-                    _inventory.Add(startingItem.id, startingItem.count);
-                }
+                Debug.Log("No items found to load inventory");
+                // for (int i = 0; i < _startingItems.Length; i++)
+                // {
+                //     ItemData startingItem = _startingItems[i];
+                //     _inventory.Add(startingItem.id, startingItem.count);
+                // }
             }
-            _currency = inventoryData.currency > 0 ? inventoryData.currency : _startingCurrency;
-            
-            _playerController.SetCurrency(_currency);
+            // _currency = inventoryData.currency > 0 ? inventoryData.currency : _startingCurrency;
+            //
+            // _playerController.SetCurrency(_currency);
         }
     }
 }

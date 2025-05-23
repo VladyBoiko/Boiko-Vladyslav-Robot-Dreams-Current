@@ -4,6 +4,6 @@ namespace GameSettings
     {
         Master,
         Sfx,
-        Ambience
+        Music
     }
 }
